@@ -19,7 +19,7 @@ public:
 
     void StartSession();
 
-public:
+protected:
     void do_read();
 
     void do_write(std::size_t length);
