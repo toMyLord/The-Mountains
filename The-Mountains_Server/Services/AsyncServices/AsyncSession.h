@@ -1,0 +1,14 @@
+//
+// Created by mylord on 2019/12/31.
+//
+
+#ifndef THE_MOUNTAINS_SERVER_ASYNCSESSION_H
+#define THE_MOUNTAINS_SERVER_ASYNCSESSION_H
+
+
+class AsyncSession {
+
+};
+
+
+#endif //THE_MOUNTAINS_SERVER_ASYNCSESSION_H
