@@ -20,11 +20,12 @@ void AsyncSession::do_read() {
                 if(ec) {
                     // 没有判断end of file 即断开连接！
                     if(ec.value() == boost::asio::error::eof){
-                        std::cout << "[client exit!]: " << ec.message() << std::endl;
-                        socket_close();
+                        std::cout << "[client exit!]: ";
+                        socket_close(ec);
                         return;
                     }
-                    std::cout << "[read error]: " << ec.message() << std::endl;
+                    std::cout << "[read error]: ";
+                    socket_close(ec);
                     return;
                 }
                 read_handler(length);
@@ -53,7 +54,12 @@ void AsyncSession::write_handler(int length){
     do_read();
 }
 
-void AsyncSession::socket_close() {
+void AsyncSession::socket_close(const boost::system::error_code & ec) {
     socket_.close();
+    std::cout << ec.message() << std::endl;
+    quit_handler();
+}
+
+void AsyncSession::quit_handler() {
     std::cout << "socket closed!\n";
 }

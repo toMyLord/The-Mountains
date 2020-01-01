@@ -28,7 +28,9 @@ protected:
 
     virtual void write_handler(int length);
 
-    virtual void socket_close();
+    void socket_close(const boost::system::error_code & ec);
+
+    virtual void quit_handler();
 
 
     enum {

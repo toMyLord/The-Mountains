@@ -5,9 +5,13 @@
 #include <vector>
 class LoginSession : public AsyncSession {
 public:
-    LoginSession(tcp::socket socket): AsyncSession(std::move(socket)){}
+    LoginSession(std::vector<std::shared_ptr<LoginSession>> & client, tcp::socket socket):
+            client_info(client), AsyncSession(std::move(socket)){
+    }
 
 private:
+    std::vector<std::shared_ptr<LoginSession>> & client_info;
+
     void read_handler(int length) override {
         buffer_[length] = '\0';
         std::cout << "Login received: " << buffer_ << std::endl;
@@ -19,6 +23,12 @@ private:
         do_read();
     }
 
+    void quit_handler() override{
+        auto it = std::find(client_info.begin(), client_info.end(), shared_from_this());
+        client_info.erase(it);
+        std::cout << "client num is : " << client_info.size() << std::endl;
+    }
+
 };
 class LoginServer : public AsyncServer{
 public:
@@ -27,7 +37,7 @@ private:
     std::vector<std::shared_ptr<LoginSession>> client_info;
 
     void accpet_handler(tcp::socket socket) override {
-        auto ptr = std::make_shared<LoginSession>(std::move(socket));
+        auto ptr = std::make_shared<LoginSession>(client_info, std::move(socket));
 
         client_info.push_back(ptr);
         std::cout << "size is : " << client_info.size() << std::endl;
