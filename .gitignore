@@ -2,3 +2,8 @@
 The-Mountains_Server/cmake-build-debug/*
 The-Mountains_Server/.idea/*
 
+#Client
+The-Mountains_Client/obj/*
+The-Mountains_Client/Temp/*
+The-Mountains_Client/.idea/*
+The-Mountains_Client/*.sln
