@@ -5,61 +5,58 @@
 #include "AsyncSession.h"
 
 AsyncSession::AsyncSession(tcp::socket socket): socket_(std::move(socket)) {
+}
 
+void AsyncSession::SendMessages(const std::string & buffer) {
+    boost::asio::write(socket_, boost::asio::buffer(buffer.c_str(), buffer.size()));
 }
 
 void AsyncSession::StartSession() {
-    do_read();
+   do_read(&AsyncSession::center_handler);
 }
 
-void AsyncSession::do_read() {
+void AsyncSession::do_read(handler read_handler) {
     auto self = shared_from_this();
     socket_.async_read_some(boost::asio::buffer(buffer_, max_length),
-            [this, self](const boost::system::error_code & ec, std::size_t length) {
-                // 调用read_handler
-                if(ec) {
-                    // 没有判断end of file 即断开连接！
-                    if(ec.value() == boost::asio::error::eof){
-                        std::cout << "[client exit!]: ";
-                        socket_close(ec);
-                        return;
-                    }
-                    std::cout << "[read error]: ";
-                    socket_close(ec);
-                    return;
-                }
-                read_handler(length);
-            }
-            );
+                            [this, self, read_handler](const boost::system::error_code & ec, std::size_t length) {
+                                // 捕获`self`使shared_ptr<session>的引用计数增加1，在该例中避免了async_read()退出时其引用计数变为0
+                                buffer_[length] = '\0';
+                                std::string buffer(buffer_);
+
+                                error_code_handler(ec);
+
+                                (this->*read_handler)(buffer);
+                            });
 }
 
-void AsyncSession::do_write(std::size_t length) {
+void AsyncSession::do_write(handler write_handler) {
     auto self = shared_from_this();
-    boost::asio::async_write(socket_, boost::asio::buffer(buffer_, length),
-            [this, self](const boost::system::error_code & ec, std::size_t length) {
-                // 调用write_handler
-                write_handler(length);
-            }
-            );
+    socket_.async_read_some(boost::asio::buffer(buffer_, max_length),
+                            [this, self, write_handler](const boost::system::error_code & ec, std::size_t length) {
+                                // 捕获`self`使shared_ptr<session>的引用计数增加1，在该例中避免了async_read()退出时其引用计数变为0
+                                buffer_[length] = '\0';
+                                std::string buffer(buffer_);
+
+                                error_code_handler(ec);
+
+                                (this->*write_handler)(buffer);
+                            });
 }
 
-void AsyncSession::read_handler(int length){
-    buffer_[length] = '\0';
-    std::cout << "received: " << buffer_ << std::endl;
-    do_write(length);
+void AsyncSession::error_code_handler(const boost::system::error_code &ec) {
+    if(ec) {
+        // 没有判断end of file 即断开连接！
+        if(ec.value() == boost::asio::error::eof){
+            socket_.close();
+
+            std::cout << "[Client Exit]: " << ec.message() << std::endl;
+            quit_handler();
+            return;
+        }
+        socket_.close();
+        std::cout << "[Read Error]: " << ec.message() << std::endl;
+        quit_handler();
+        return;
+    }
 }
 
-void AsyncSession::write_handler(int length){
-    std::cout << "message send!\n";
-    do_read();
-}
-
-void AsyncSession::socket_close(const boost::system::error_code & ec) {
-    socket_.close();
-    std::cout << ec.message() << std::endl;
-    quit_handler();
-}
-
-void AsyncSession::quit_handler() {
-    std::cout << "socket closed!\n";
-}

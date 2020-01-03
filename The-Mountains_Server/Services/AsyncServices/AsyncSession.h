@@ -10,34 +10,36 @@
 #include <utility>
 #include <boost/asio.hpp>
 #include <iostream>
+#include <mutex>
 
 using boost::asio::ip::tcp;
 
 class AsyncSession : public std::enable_shared_from_this<AsyncSession> {
 public:
-    AsyncSession(tcp::socket socket);
+    explicit AsyncSession(tcp::socket socket);
 
     void StartSession();
 
+    void SendMessages(const std::string & buffer);
+
 protected:
-    void do_read();
-
-    void do_write(std::size_t length);
-
-    virtual void read_handler(int length);
-
-    virtual void write_handler(int length);
-
-    void socket_close(const boost::system::error_code & ec);
-
-    virtual void quit_handler();
-
+    typedef void (AsyncSession::*handler)(std::string buffer);
 
     enum {
         max_length = 1024
     };
     tcp::socket socket_;
     char buffer_[max_length];
+
+    void do_read(handler read_handler);
+
+    void do_write(handler write_handler);
+
+    void error_code_handler(const boost::system::error_code & ec);
+
+    virtual void center_handler(std::string buffer) = 0;
+
+    virtual void quit_handler() = 0;
 };
 
 
