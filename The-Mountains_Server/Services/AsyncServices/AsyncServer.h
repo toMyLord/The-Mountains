@@ -66,7 +66,8 @@ void AsyncServer<Session>::do_accept() {
 
 template<typename Session>
 void AsyncServer<Session>::accept_handler(tcp::socket socket) {
-    auto ptr = std::make_shared<Session>(std::move(socket), client_info);
+    auto ptr = std::make_shared<Session>(std::move(socket), this->client_info);
+    client_info.push_back(ptr);
     ptr->StartSession(); // 开始接受客户端的消息
 }
 

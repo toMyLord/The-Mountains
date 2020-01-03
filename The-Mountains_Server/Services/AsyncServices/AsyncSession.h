@@ -23,7 +23,7 @@ public:
     void SendMessages(const std::string & buffer);
 
 protected:
-    typedef void (AsyncSession::*handler)(std::string buffer);
+//    typedef void (AsyncSession::*handler)(std::string buffer);
 
     enum {
         max_length = 1024
@@ -31,11 +31,11 @@ protected:
     tcp::socket socket_;
     char buffer_[max_length];
 
-    void do_read(handler read_handler);
+    void do_read();
 
-    void do_write(handler write_handler);
+    void do_write();
 
-    void error_code_handler(const boost::system::error_code & ec);
+    bool error_code_handler(const boost::system::error_code & ec);
 
     virtual void center_handler(std::string buffer) = 0;
 

@@ -12,38 +12,39 @@ void AsyncSession::SendMessages(const std::string & buffer) {
 }
 
 void AsyncSession::StartSession() {
-   do_read(&AsyncSession::center_handler);
+   do_read();
 }
 
-void AsyncSession::do_read(handler read_handler) {
+void AsyncSession::do_read() {
     auto self = shared_from_this();
     socket_.async_read_some(boost::asio::buffer(buffer_, max_length),
-                            [this, self, read_handler](const boost::system::error_code & ec, std::size_t length) {
+                            [this, self](const boost::system::error_code & ec, std::size_t length) {
                                 // 捕获`self`使shared_ptr<session>的引用计数增加1，在该例中避免了async_read()退出时其引用计数变为0
                                 buffer_[length] = '\0';
                                 std::string buffer(buffer_);
 
-                                error_code_handler(ec);
+                                if(!error_code_handler(ec)) return;
 
-                                (this->*read_handler)(buffer);
+//                                (this->*read_handler)(buffer);
+                                center_handler(buffer);
                             });
 }
 
-void AsyncSession::do_write(handler write_handler) {
+void AsyncSession::do_write() {
     auto self = shared_from_this();
     socket_.async_read_some(boost::asio::buffer(buffer_, max_length),
-                            [this, self, write_handler](const boost::system::error_code & ec, std::size_t length) {
+                            [this, self](const boost::system::error_code & ec, std::size_t length) {
                                 // 捕获`self`使shared_ptr<session>的引用计数增加1，在该例中避免了async_read()退出时其引用计数变为0
                                 buffer_[length] = '\0';
                                 std::string buffer(buffer_);
 
-                                error_code_handler(ec);
+                                if(!error_code_handler(ec)) return;
 
-                                (this->*write_handler)(buffer);
+//                                (this->*write_handler)(buffer);
                             });
 }
 
-void AsyncSession::error_code_handler(const boost::system::error_code &ec) {
+bool AsyncSession::error_code_handler(const boost::system::error_code &ec) {
     if(ec) {
         // 没有判断end of file 即断开连接！
         if(ec.value() == boost::asio::error::eof){
@@ -51,12 +52,13 @@ void AsyncSession::error_code_handler(const boost::system::error_code &ec) {
 
             std::cout << "[Client Exit]: " << ec.message() << std::endl;
             quit_handler();
-            return;
+            return false;
         }
         socket_.close();
         std::cout << "[Read Error]: " << ec.message() << std::endl;
         quit_handler();
-        return;
+        return false;
     }
+    return true;
 }
 
