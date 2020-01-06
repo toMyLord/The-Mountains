@@ -9,12 +9,11 @@
 #include <string>
 #include <time.h>
 
-class SpecificTime {
+class TimeServices {
 public:
-    std::string getTime(){
+    static std::string getTime(){
         time_t now = time(0);
         tm * t = localtime(&now);
-
 
         std::stringstream time_stream;
         time_stream << t->tm_year + 1900 << "/" << t->tm_mon + 1 << "/"
