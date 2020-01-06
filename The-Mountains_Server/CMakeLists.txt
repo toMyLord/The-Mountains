@@ -10,6 +10,6 @@ add_executable(The_Mountains_Server
         Services/AsyncServices/AsyncSession.h
         Services/AsyncServices/AsyncSession.cpp
         Services/AsyncServices/AsyncServer.h
-        )
+        Services/TimeServices/TimeService.h)
 
 target_link_libraries(The_Mountains_Server pthread)
