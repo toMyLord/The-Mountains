@@ -70,6 +70,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Info\FormatDetecter.cs" />
     <Compile Include="Assets\Scripts\Message\MSGHandler.cs" />
     <Compile Include="Assets\Scripts\Network\Connection.cs" />
     <Compile Include="Assets\Scripts\Network\ConnectionManager.cs" />

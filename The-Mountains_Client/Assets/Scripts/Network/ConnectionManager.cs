@@ -72,6 +72,7 @@ public class ConnectionManager : MonoBehaviour
         MSGHandler.MSGSeparate(msg, out msgType, out destMsg);  //把消息拆分成类型号和内容两部分
         //TODO 把内容还原成对应的类，对每种不同的类采取不同处理方式
         //switch...
+        //当 内容为注册账号已存在 时，通知通知注册界面UI
 
     }
 
