@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Login.pb.h"
 #include "Services/AsyncServices/AsyncServer.h"     // for test！
 #include "Services/AsyncServices/AsyncSession.h"
 
@@ -13,18 +14,25 @@ private:
 
     void center_handler(std::string buffer) override {
         switch(buffer[0]){
-            case '1': one(); break;
-            case '2': two(); break;
-            case '3': three(); break;
+            case '1': User(buffer.substr(1)); break;
+            case '2': Tourist(buffer.substr(1)); break;
         }
         do_read();
     }
 
-    void one(){ std::cout << "1\n"; }
+    void User(std::string buffer){
+        UserLogin user;
+        user.ParseFromArray(buffer.c_str(), buffer.size());
+        std::cout << "User account : " << user.account() << std::endl;
+        std::cout << "User password : " << user.password() << std::endl;
+    }
 
-    void two(){ std::cout << "2\n"; }
+    void Tourist(std::string buffer){
+        TouristLogin tourist;
+        tourist.ParseFromArray(buffer.c_str(), buffer.size());
+        std::cout << "Tourist account : " << tourist.account() << std::endl;
+    }
 
-    void three(){ std::cout << "3\n"; }
 
     void quit_handler() override{
         auto it = std::find(client_info.begin(), client_info.end(), shared_from_this());
@@ -44,6 +52,14 @@ int main(int argc, char * argv[]) {
             std::cerr << "Usage: port error!\n";
             return 1;
         }
+
+        std::string buffer;
+        UserLogin u;
+        u.set_account("www");
+        u.set_password("yyy");
+        u.SerializeToString(&buffer);
+        std::cout << buffer << std::endl;
+        std::cout << "end" << std::endl;
 
         boost::asio::io_context io_context_;
 

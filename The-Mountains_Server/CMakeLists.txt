@@ -10,14 +10,17 @@ include_directories(/usr/include/mysql)
 #link_libraries(/usr/local/lib)
 
 add_executable(The_Mountains_Server
-#        main.cpp
-#        Services/AsyncServices/AsyncSession.h
-#        Services/AsyncServices/AsyncSession.cpp
-#        Services/AsyncServices/AsyncServer.h
-#        Services/TimeServices/TimeService.h
-        Services/DBServices/DatabaseService.cpp
-        Services/DBServices/DatabaseService.h
+        main.cpp
+        Services/AsyncServices/AsyncSession.h
+        Services/AsyncServices/AsyncSession.cpp
+        Services/AsyncServices/AsyncServer.h
+        Services/TimeServices/TimeService.h
+        Login.pb.h
+        Login.pb.cc
+#        Services/DBServices/DatabaseService.cpp
+#        Services/DBServices/DatabaseService.h
 )
 
 target_link_libraries(The_Mountains_Server pthread)
 target_link_libraries(The_Mountains_Server mysqlpp)
+target_link_libraries(The_Mountains_Server protobuf)
