@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+message UserLogin
+{
+    string account = 1;
+    string password = 2;
+}
+
+message TouristLogin
+{
+    string account = 1;
+}
