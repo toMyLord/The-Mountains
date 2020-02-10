@@ -53,14 +53,6 @@ int main(int argc, char * argv[]) {
             return 1;
         }
 
-        std::string buffer;
-        UserLogin u;
-        u.set_account("www");
-        u.set_password("yyy");
-        u.SerializeToString(&buffer);
-        std::cout << buffer << std::endl;
-        std::cout << "end" << std::endl;
-
         boost::asio::io_context io_context_;
 
         AsyncServer<LoginSession> s(io_context_, std::atoi(argv[1]), true);
