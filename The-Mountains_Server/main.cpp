@@ -13,6 +13,7 @@ private:
     std::vector<std::shared_ptr<LoginSession>> & client_info;
 
     void center_handler(std::string buffer) override {
+        std::cout << "received:" << buffer << std::endl;
         switch(buffer[0]){
             case '1': User(buffer.substr(1)); break;
             case '2': Tourist(buffer.substr(1)); break;
