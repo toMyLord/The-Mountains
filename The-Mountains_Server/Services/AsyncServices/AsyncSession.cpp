@@ -50,12 +50,19 @@ bool AsyncSession::error_code_handler(const boost::system::error_code &ec) {
         if(ec.value() == boost::asio::error::eof){
             socket_.close();
 
-            std::cout << "[Client Exit]: " << ec.message() << std::endl;
+            std::string log_buffer;
+            log_buffer = '[' + TimeServices::getTime() + "  Client Exit]:\t" + ec.message() + '.';
+            LogServices::getInstance()->RecordingBoth(log_buffer, true);
+
             quit_handler();
             return false;
         }
         socket_.close();
-        std::cout << "[Read Error]: " << ec.message() << std::endl;
+
+        std::string log_buffer;
+        log_buffer = '[' + TimeServices::getTime() + "  Read Error]:\t" + ec.message() + ", connection closed.";
+        LogServices::getInstance()->RecordingBoth(log_buffer, false);
+
         quit_handler();
         return false;
     }

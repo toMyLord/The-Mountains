@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Login.pb.h"
-#include "Services/AsyncServices/AsyncServer.h"     // for test！
+#include "Services/AsyncServices/AsyncServer.h"
 #include "Services/AsyncServices/AsyncSession.h"
 
 class LoginSession : public AsyncSession {
@@ -13,7 +13,7 @@ private:
     std::vector<std::shared_ptr<LoginSession>> & client_info;
 
     void center_handler(std::string buffer) override {
-        std::cout << "received:" << buffer << std::endl;
+//        std::cout << "received:" << buffer << std::endl;
         switch(buffer[0]){
             case '1': User(buffer.substr(1)); break;
             case '2': Tourist(buffer.substr(1)); break;
@@ -37,11 +37,17 @@ private:
 
     void quit_handler() override{
         auto it = std::find(client_info.begin(), client_info.end(), shared_from_this());
-        if(it == client_info.end())
-            std::cout << "[Quit Error] : client information not found!" << std::endl;
+        if(it == client_info.end()) {
+            std::string log_buffer;
+            log_buffer = '[' + TimeServices::getTime() + "  Quit Error]:\tclient information not found!";
+            LogServices::getInstance()->RecordingBoth(log_buffer, false);
+        }
         else
             client_info.erase(it);
-        std::cout << "client num is : " << client_info.size() << std::endl;
+
+        std::string log_buffer;
+        log_buffer = "\tclient num is : " + std::to_string(client_info.size());
+        LogServices::getInstance()->RecordingBoth(log_buffer, true);
     }
 };
 
@@ -50,7 +56,9 @@ private:
 int main(int argc, char * argv[]) {
     try {
         if(argc != 2) {
-            std::cerr << "Usage: port error!\n";
+            std::string log_buffer;
+            log_buffer = '[' + TimeServices::getTime() + "  Usage Error]:\tNo port entered!";
+            LogServices::getInstance()->RecordingBoth(log_buffer, false);
             return 1;
         }
 
@@ -62,7 +70,9 @@ int main(int argc, char * argv[]) {
     }
 
     catch (std::exception& e) {
-        std::cerr << "Exception: " << e.what() << "\n";
+        std::string log_buffer;
+        log_buffer = '[' + TimeServices::getTime() + "  Exception Occured]:\t" + e.what() + '.';
+        LogServices::getInstance()->RecordingBoth(log_buffer, false);
     }
 
     return 0;

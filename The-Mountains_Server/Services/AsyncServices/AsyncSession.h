@@ -11,6 +11,7 @@
 #include <boost/asio.hpp>
 #include <iostream>
 #include <mutex>
+#include "../LogServices/LogServices.h"
 
 using boost::asio::ip::tcp;
 

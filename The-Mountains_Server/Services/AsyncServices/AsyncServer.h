@@ -11,6 +11,7 @@
 #include <utility>
 #include <boost/asio.hpp>
 #include <iostream>
+#include "../LogServices/LogServices.h"
 
 using boost::asio::ip::tcp;
 
@@ -46,7 +47,9 @@ void AsyncServer<Session>::do_accept() {
             [this](boost::system::error_code ec, tcp::socket socket) {
                 if(ec) {
                     // 如果接受连接异常
-                    std::cerr << "[Accept Error] : " << ec.message() << std::endl;
+                    std::string log_buffer;
+                    log_buffer = '[' + TimeServices::getTime() + "  Accept Error]:\t" + ec.message() + '.';
+                    LogServices::getInstance()->RecordingBoth(log_buffer, false);
                 }
                 else {
                     accept_handler(std::move(socket));
@@ -55,7 +58,11 @@ void AsyncServer<Session>::do_accept() {
                         std::thread heartbeats_t(&AsyncServer::HeartBeats_t, this);
                         heartbeats_t.detach();
                         is_threaded = true;
-                        std::cout << "[Heart Beats]: Server started to send heart beats packet!\n";
+
+                        std::string log_buffer;
+                        log_buffer = '[' + TimeServices::getTime() +
+                                "  Heartbeats Started]:\tServer started to send heart beats packet!";
+                        LogServices::getInstance()->RecordingBoth(log_buffer, true);
                     }
                 }
 
@@ -66,6 +73,12 @@ void AsyncServer<Session>::do_accept() {
 
 template<typename Session>
 void AsyncServer<Session>::accept_handler(tcp::socket socket) {
+    std::string log_buffer;
+    log_buffer = '[' + TimeServices::getTime() + "  Connection Accepted]:\tAccept connection from " +
+                 socket.remote_endpoint().address().to_string() + ":" +
+                 std::to_string(socket.remote_endpoint().port()) + ".";
+    LogServices::getInstance()->RecordingBoth(log_buffer, true);
+
     auto ptr = std::make_shared<Session>(std::move(socket), this->client_info);
     client_info.push_back(ptr);
     ptr->StartSession(); // 开始接受客户端的消息
@@ -82,7 +95,10 @@ void AsyncServer<Session>::HeartBeats_t() {
         sleep(3);
     }
     is_threaded = false;
-    std::cout << "[Heart Beats]: No client is online, stop send heart beats packet!\n";
+    std::string log_buffer;
+    log_buffer = '[' + TimeServices::getTime() +
+                 "  Heartbeats Ended]:\tNo client is online, stop send heart beats packet!";
+    LogServices::getInstance()->RecordingBoth(log_buffer, true);
 }
 
 #endif //THE_MOUNTAINS_SERVER_ASYNCSERVER_H
