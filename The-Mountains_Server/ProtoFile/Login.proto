@@ -1,12 +1,48 @@
 syntax = "proto3";
 
-message UserLogin
+//Client to Server
+
+message UserLogin		//协议号1，普通登录
 {
     string account = 1;
     string password = 2;
 }
 
-message TouristLogin
+message TouristLogin	//协议号2，游客登录
 {
     string account = 1;
+}
+
+message RegisterLogin	//协议号3，注册
+{
+    string account = 1;
+    string password = 2;
+    string email = 3;
+}
+
+message RegisterDetect	//协议号4，注册检测（账号、邮箱重复）
+{
+    string account = 1;
+    string email = 2;
+}
+
+//Server to Client
+
+message UserInfo		//协议号1，用户信息
+{
+    int32 userid = 1;
+    string username = 2;
+    int32 score = 3;
+}
+
+message LoginDetectFeedback	//协议号2，登录反馈（账号、密码）
+{
+    bool isAccountExist = 1;
+    bool isPasswordCorrect = 2;
+}
+
+message RegisterDetectFeedback	//协议号3，注册重复检测（账号、邮箱）
+{
+    bool isAccountExist = 1;
+    bool isEmailExist = 2;
 }
