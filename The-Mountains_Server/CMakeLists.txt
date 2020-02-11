@@ -7,6 +7,8 @@ aux_source_directory(Services/AsyncServices AsyncServices_src)
 aux_source_directory(Services/DBServices DBServices_src)
 aux_source_directory(Services/LogServices LogServices_src)
 aux_source_directory(Services/TimeServices TimeServices_src)
+aux_source_directory(MsgProtocol Msg_src)
+aux_source_directory(Applications Applications_src)
 
 #include_directories(/usr/local/include/mysql++)
 include_directories(/usr/include/mysql)
@@ -14,13 +16,13 @@ include_directories(/usr/include/mysql)
 
 add_executable(The_Mountains_Server
         main.cpp
-        Login.pb.h
-        Login.pb.cc
+        ${Msg_src}
         ${AsyncServices_src}
         ${DBServices_src}
         ${LogServices_src}
         ${TimeServices_src}
-        )
+        ${Applications_src}
+)
 
 target_link_libraries(The_Mountains_Server pthread)
 target_link_libraries(The_Mountains_Server mysqlpp)

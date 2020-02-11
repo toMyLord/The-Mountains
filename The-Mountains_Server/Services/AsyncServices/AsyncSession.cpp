@@ -25,7 +25,6 @@ void AsyncSession::do_read() {
 
                                 if(!error_code_handler(ec)) return;
 
-//                                (this->*read_handler)(buffer);
                                 center_handler(buffer);
                             });
 }
