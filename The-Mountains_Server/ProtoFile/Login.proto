@@ -46,3 +46,8 @@ message RegisterDetectFeedback	//协议号3，注册重复检测（账号、邮�
     bool isAccountExist = 1;
     bool isEmailExist = 2;
 }
+
+message TouristFeedback	    //协议4，游客账号反馈记录
+{
+    string account = 1;
+}

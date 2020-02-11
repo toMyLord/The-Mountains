@@ -47,7 +47,7 @@ struct TableStruct_Login_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[7]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[8]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -66,6 +66,9 @@ extern RegisterDetectFeedbackDefaultTypeInternal _RegisterDetectFeedback_default
 class RegisterLogin;
 class RegisterLoginDefaultTypeInternal;
 extern RegisterLoginDefaultTypeInternal _RegisterLogin_default_instance_;
+class TouristFeedback;
+class TouristFeedbackDefaultTypeInternal;
+extern TouristFeedbackDefaultTypeInternal _TouristFeedback_default_instance_;
 class TouristLogin;
 class TouristLoginDefaultTypeInternal;
 extern TouristLoginDefaultTypeInternal _TouristLogin_default_instance_;
@@ -80,6 +83,7 @@ template<> ::LoginDetectFeedback* Arena::CreateMaybeMessage<::LoginDetectFeedbac
 template<> ::RegisterDetect* Arena::CreateMaybeMessage<::RegisterDetect>(Arena*);
 template<> ::RegisterDetectFeedback* Arena::CreateMaybeMessage<::RegisterDetectFeedback>(Arena*);
 template<> ::RegisterLogin* Arena::CreateMaybeMessage<::RegisterLogin>(Arena*);
+template<> ::TouristFeedback* Arena::CreateMaybeMessage<::TouristFeedback>(Arena*);
 template<> ::TouristLogin* Arena::CreateMaybeMessage<::TouristLogin>(Arena*);
 template<> ::UserInfo* Arena::CreateMaybeMessage<::UserInfo>(Arena*);
 template<> ::UserLogin* Arena::CreateMaybeMessage<::UserLogin>(Arena*);
@@ -1132,6 +1136,141 @@ class RegisterDetectFeedback :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Login_2eproto;
 };
+// -------------------------------------------------------------------
+
+class TouristFeedback :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:TouristFeedback) */ {
+ public:
+  TouristFeedback();
+  virtual ~TouristFeedback();
+
+  TouristFeedback(const TouristFeedback& from);
+  TouristFeedback(TouristFeedback&& from) noexcept
+    : TouristFeedback() {
+    *this = ::std::move(from);
+  }
+
+  inline TouristFeedback& operator=(const TouristFeedback& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TouristFeedback& operator=(TouristFeedback&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const TouristFeedback& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const TouristFeedback* internal_default_instance() {
+    return reinterpret_cast<const TouristFeedback*>(
+               &_TouristFeedback_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(TouristFeedback& a, TouristFeedback& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TouristFeedback* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline TouristFeedback* New() const final {
+    return CreateMaybeMessage<TouristFeedback>(nullptr);
+  }
+
+  TouristFeedback* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<TouristFeedback>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const TouristFeedback& from);
+  void MergeFrom(const TouristFeedback& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TouristFeedback* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "TouristFeedback";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_Login_2eproto);
+    return ::descriptor_table_Login_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAccountFieldNumber = 1,
+  };
+  // string account = 1;
+  void clear_account();
+  const std::string& account() const;
+  void set_account(const std::string& value);
+  void set_account(std::string&& value);
+  void set_account(const char* value);
+  void set_account(const char* value, size_t size);
+  std::string* mutable_account();
+  std::string* release_account();
+  void set_allocated_account(std::string* account);
+  private:
+  const std::string& _internal_account() const;
+  void _internal_set_account(const std::string& value);
+  std::string* _internal_mutable_account();
+  public:
+
+  // @@protoc_insertion_point(class_scope:TouristFeedback)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr account_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Login_2eproto;
+};
 // ===================================================================
 
 
@@ -1827,9 +1966,75 @@ inline void RegisterDetectFeedback::set_isemailexist(bool value) {
   // @@protoc_insertion_point(field_set:RegisterDetectFeedback.isEmailExist)
 }
 
+// -------------------------------------------------------------------
+
+// TouristFeedback
+
+// string account = 1;
+inline void TouristFeedback::clear_account() {
+  account_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& TouristFeedback::account() const {
+  // @@protoc_insertion_point(field_get:TouristFeedback.account)
+  return _internal_account();
+}
+inline void TouristFeedback::set_account(const std::string& value) {
+  _internal_set_account(value);
+  // @@protoc_insertion_point(field_set:TouristFeedback.account)
+}
+inline std::string* TouristFeedback::mutable_account() {
+  // @@protoc_insertion_point(field_mutable:TouristFeedback.account)
+  return _internal_mutable_account();
+}
+inline const std::string& TouristFeedback::_internal_account() const {
+  return account_.GetNoArena();
+}
+inline void TouristFeedback::_internal_set_account(const std::string& value) {
+  
+  account_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+}
+inline void TouristFeedback::set_account(std::string&& value) {
+  
+  account_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:TouristFeedback.account)
+}
+inline void TouristFeedback::set_account(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  account_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:TouristFeedback.account)
+}
+inline void TouristFeedback::set_account(const char* value, size_t size) {
+  
+  account_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:TouristFeedback.account)
+}
+inline std::string* TouristFeedback::_internal_mutable_account() {
+  
+  return account_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* TouristFeedback::release_account() {
+  // @@protoc_insertion_point(field_release:TouristFeedback.account)
+  
+  return account_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void TouristFeedback::set_allocated_account(std::string* account) {
+  if (account != nullptr) {
+    
+  } else {
+    
+  }
+  account_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), account);
+  // @@protoc_insertion_point(field_set_allocated:TouristFeedback.account)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

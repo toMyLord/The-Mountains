@@ -42,6 +42,10 @@ class RegisterDetectFeedbackDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RegisterDetectFeedback> _instance;
 } _RegisterDetectFeedback_default_instance_;
+class TouristFeedbackDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<TouristFeedback> _instance;
+} _TouristFeedback_default_instance_;
 static void InitDefaultsscc_info_LoginDetectFeedback_Login_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -98,6 +102,20 @@ static void InitDefaultsscc_info_RegisterLogin_Login_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RegisterLogin_Login_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_RegisterLogin_Login_2eproto}, {}};
 
+static void InitDefaultsscc_info_TouristFeedback_Login_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_TouristFeedback_default_instance_;
+    new (ptr) ::TouristFeedback();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::TouristFeedback::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_TouristFeedback_Login_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_TouristFeedback_Login_2eproto}, {}};
+
 static void InitDefaultsscc_info_TouristLogin_Login_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -140,7 +158,7 @@ static void InitDefaultsscc_info_UserLogin_Login_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_UserLogin_Login_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_UserLogin_Login_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Login_2eproto[7];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Login_2eproto[8];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_Login_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Login_2eproto = nullptr;
 
@@ -195,6 +213,12 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Login_2eproto::offsets[] PROTO
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::RegisterDetectFeedback, isaccountexist_),
   PROTOBUF_FIELD_OFFSET(::RegisterDetectFeedback, isemailexist_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::TouristFeedback, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::TouristFeedback, account_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::UserLogin)},
@@ -204,6 +228,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 28, -1, sizeof(::UserInfo)},
   { 36, -1, sizeof(::LoginDetectFeedback)},
   { 43, -1, sizeof(::RegisterDetectFeedback)},
+  { 50, -1, sizeof(::TouristFeedback)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -214,6 +239,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_UserInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_LoginDetectFeedback_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_RegisterDetectFeedback_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_TouristFeedback_default_instance_),
 };
 
 const char descriptor_table_protodef_Login_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -227,15 +253,17 @@ const char descriptor_table_protodef_Login_2eproto[] PROTOBUF_SECTION_VARIABLE(p
   "nDetectFeedback\022\026\n\016isAccountExist\030\001 \001(\010\022"
   "\031\n\021isPasswordCorrect\030\002 \001(\010\"F\n\026RegisterDe"
   "tectFeedback\022\026\n\016isAccountExist\030\001 \001(\010\022\024\n\014"
-  "isEmailExist\030\002 \001(\010b\006proto3"
+  "isEmailExist\030\002 \001(\010\"\"\n\017TouristFeedback\022\017\n"
+  "\007account\030\001 \001(\tb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Login_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Login_2eproto_sccs[7] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Login_2eproto_sccs[8] = {
   &scc_info_LoginDetectFeedback_Login_2eproto.base,
   &scc_info_RegisterDetect_Login_2eproto.base,
   &scc_info_RegisterDetectFeedback_Login_2eproto.base,
   &scc_info_RegisterLogin_Login_2eproto.base,
+  &scc_info_TouristFeedback_Login_2eproto.base,
   &scc_info_TouristLogin_Login_2eproto.base,
   &scc_info_UserInfo_Login_2eproto.base,
   &scc_info_UserLogin_Login_2eproto.base,
@@ -243,10 +271,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Log
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Login_2eproto_once;
 static bool descriptor_table_Login_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Login_2eproto = {
-  &descriptor_table_Login_2eproto_initialized, descriptor_table_protodef_Login_2eproto, "Login.proto", 426,
-  &descriptor_table_Login_2eproto_once, descriptor_table_Login_2eproto_sccs, descriptor_table_Login_2eproto_deps, 7, 0,
+  &descriptor_table_Login_2eproto_initialized, descriptor_table_protodef_Login_2eproto, "Login.proto", 462,
+  &descriptor_table_Login_2eproto_once, descriptor_table_Login_2eproto_sccs, descriptor_table_Login_2eproto_deps, 8, 0,
   schemas, file_default_instances, TableStruct_Login_2eproto::offsets,
-  file_level_metadata_Login_2eproto, 7, file_level_enum_descriptors_Login_2eproto, file_level_service_descriptors_Login_2eproto,
+  file_level_metadata_Login_2eproto, 8, file_level_enum_descriptors_Login_2eproto, file_level_service_descriptors_Login_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -1884,6 +1912,205 @@ void RegisterDetectFeedback::InternalSwap(RegisterDetectFeedback* other) {
 }
 
 
+// ===================================================================
+
+void TouristFeedback::InitAsDefaultInstance() {
+}
+class TouristFeedback::_Internal {
+ public:
+};
+
+TouristFeedback::TouristFeedback()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:TouristFeedback)
+}
+TouristFeedback::TouristFeedback(const TouristFeedback& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  account_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_account().empty()) {
+    account_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.account_);
+  }
+  // @@protoc_insertion_point(copy_constructor:TouristFeedback)
+}
+
+void TouristFeedback::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_TouristFeedback_Login_2eproto.base);
+  account_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+TouristFeedback::~TouristFeedback() {
+  // @@protoc_insertion_point(destructor:TouristFeedback)
+  SharedDtor();
+}
+
+void TouristFeedback::SharedDtor() {
+  account_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void TouristFeedback::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const TouristFeedback& TouristFeedback::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_TouristFeedback_Login_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void TouristFeedback::Clear() {
+// @@protoc_insertion_point(message_clear_start:TouristFeedback)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  account_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+const char* TouristFeedback::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // string account = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_account();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "TouristFeedback.account"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* TouristFeedback::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:TouristFeedback)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string account = 1;
+  if (this->account().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_account().data(), static_cast<int>(this->_internal_account().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "TouristFeedback.account");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_account(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:TouristFeedback)
+  return target;
+}
+
+size_t TouristFeedback::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:TouristFeedback)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string account = 1;
+  if (this->account().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_account());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void TouristFeedback::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:TouristFeedback)
+  GOOGLE_DCHECK_NE(&from, this);
+  const TouristFeedback* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<TouristFeedback>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:TouristFeedback)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:TouristFeedback)
+    MergeFrom(*source);
+  }
+}
+
+void TouristFeedback::MergeFrom(const TouristFeedback& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:TouristFeedback)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.account().size() > 0) {
+
+    account_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.account_);
+  }
+}
+
+void TouristFeedback::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:TouristFeedback)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void TouristFeedback::CopyFrom(const TouristFeedback& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:TouristFeedback)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TouristFeedback::IsInitialized() const {
+  return true;
+}
+
+void TouristFeedback::InternalSwap(TouristFeedback* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  account_.Swap(&other->account_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TouristFeedback::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::UserLogin* Arena::CreateMaybeMessage< ::UserLogin >(Arena* arena) {
@@ -1906,6 +2133,9 @@ template<> PROTOBUF_NOINLINE ::LoginDetectFeedback* Arena::CreateMaybeMessage< :
 }
 template<> PROTOBUF_NOINLINE ::RegisterDetectFeedback* Arena::CreateMaybeMessage< ::RegisterDetectFeedback >(Arena* arena) {
   return Arena::CreateInternal< ::RegisterDetectFeedback >(arena);
+}
+template<> PROTOBUF_NOINLINE ::TouristFeedback* Arena::CreateMaybeMessage< ::TouristFeedback >(Arena* arena) {
+  return Arena::CreateInternal< ::TouristFeedback >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 
