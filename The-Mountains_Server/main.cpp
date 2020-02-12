@@ -14,6 +14,10 @@ int main(int argc, char * argv[]) {
 
         AsyncServer<LoginSession> login_server(io_context_, std::atoi(argv[1]), false);
 
+        std::string log_buffer;
+        log_buffer = '[' + TimeServices::getTime() + "  Server Online]:\tLogin Server is online!";
+        LogServices::getInstance()->RecordingBoth(log_buffer, true);
+
         // 新开7个线程，加上原线程总共8个线程用来处理回调函数
         for(int i = 0; i < 7; i++) {
             std::thread th([&io_context_](){ io_context_.run(); });

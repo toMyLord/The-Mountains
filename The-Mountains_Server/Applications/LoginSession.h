@@ -36,10 +36,11 @@ private:
         RegisterDetectCode = 4  // 注册时检测
     };
 
-    enum sendMsgToServer {
+    enum sendMsgToClient {
         UserInfoCode = 1,               // 用户信息
         LoginDetectFeedbackCode = 2,    // 登录反馈
-        RegisterDetectFeedbackCode = 3  // 注册反馈
+        RegisterDetectFeedbackCode = 3, // 注册反馈
+        TouristFeedbackCode = 4         // 游客账号反馈
     };
 };
 

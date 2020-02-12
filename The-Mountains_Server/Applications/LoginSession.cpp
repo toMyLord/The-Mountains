@@ -47,7 +47,7 @@ void LoginSession::UserLoginHandler(const std::string & buffer) {
 
             std::string temp, sendMsg;
             user_info.SerializeToString(&temp);
-            sendMsg = std::to_string(sendMsgToServer::UserInfoCode) + temp;
+            sendMsg = std::to_string(sendMsgToClient::UserInfoCode) + temp;
             sendMsg[0] = sendMsg[0] - '0';
 
             SendMessages(sendMsg);
@@ -65,7 +65,7 @@ void LoginSession::UserLoginHandler(const std::string & buffer) {
 
             std::string temp, sendMsg;
             login_detect.SerializeToString(&temp);
-            sendMsg = std::to_string(sendMsgToServer::LoginDetectFeedbackCode) + temp;
+            sendMsg = std::to_string(sendMsgToClient ::LoginDetectFeedbackCode) + temp;
             sendMsg[0] = sendMsg[0] - '0';
 
             SendMessages(sendMsg);
@@ -112,7 +112,7 @@ void LoginSession::TouristLoginHandler(const std::string & buffer) {
 
             std::string temp, sendMsg;
             user_info.SerializeToString(&temp);
-            sendMsg = std::to_string(sendMsgToServer::UserInfoCode) + temp;
+            sendMsg = std::to_string(sendMsgToClient::UserInfoCode) + temp;
             sendMsg[0] = sendMsg[0] - '0';
 
             SendMessages(sendMsg);
@@ -125,22 +125,63 @@ void LoginSession::TouristLoginHandler(const std::string & buffer) {
         else if (res.size() == 0) {
             // 未找到对应游客，需要建立游客账号并返回给客户端
             query_buffer = "SELECT MAX(id) FROM the_mountains.User_Info";
-            mysqlpp::Query query = conn->query(query_buffer.c_str());
-            mysqlpp::StoreQueryResult res = query.store();
-            int tourist_id = res[0][0] + 1;         // 最大id号+1作为新的账号的id
+            mysqlpp::Query query_1 = conn->query(query_buffer.c_str());
+            mysqlpp::StoreQueryResult res_1 = query_1.store();
+            long tourist_id = res_1[0][0] + 1;         // 最大id号+1作为新的账号的id
 
-            // 找到YK×××××× 中×××××最大值加1作为username和account
+            // 找到YK×××××× 中××××××最大值加1作为username和account
+            query_buffer = "SELECT MAX(CAST(SUBSTRING(account,3) AS UNSIGNED INTEGER)) ";
+            query_buffer += "FROM User_Info WHERE account REGEXP \'^YK[1-9][0-9]{5}$\'";
+            mysqlpp::Query query_2 = conn->query(query_buffer.c_str());
+            mysqlpp::StoreQueryResult res_2 = query_2.store();
+            int tourist_account_num = res_2[0][0] + 1;
 
-            LoginDetectFeedback login_detect;
-            login_detect.set_isaccountexist(false);
-            login_detect.set_ispasswordcorrect(false);
+            std::string tourist_account, tourist_username;
+            tourist_account = "YK" + std::to_string(tourist_account_num);
+            tourist_username = "yk_" + std::to_string(tourist_account_num);
 
-            std::string temp, sendMsg;
-            login_detect.SerializeToString(&temp);
-            sendMsg = std::to_string(sendMsgToServer::LoginDetectFeedbackCode) + temp;
-            sendMsg[0] = sendMsg[0] - '0';
+            // 将新生成的用户数据插入数据库
+            query_buffer = "INSERT INTO the_mountains.User_Info VALUES(\'" + std::to_string(tourist_id) +
+                    "\', \'" + tourist_account + "\', \'88888888\', \'" + tourist_username + "\', \'\', \'0\')";
+            mysqlpp::Query query_3 = conn->query(query_buffer.c_str());
+            if (query_3.exec()) {
+                // 数据插入成功
+                std::string log_buffer;
+                log_buffer = '[' + TimeServices::getTime() +
+                        "  Signup Succeed]:\tCreate new tourist account:" + tourist_account;
+                LogServices::getInstance()->RecordingBoth(log_buffer, true);
 
-            SendMessages(sendMsg);
+                // 先发送 “协议4-游客账号反馈” 信息
+                std::string temp, sendMsg;
+                TouristFeedback tourist_fb;
+                tourist_fb.set_account(tourist_account);
+                tourist_fb.SerializeToString(&temp);
+                sendMsg = std::to_string(sendMsgToClient::TouristFeedbackCode) + temp;
+                sendMsg[0] = sendMsg[0] - '0';
+                SendMessages(sendMsg);
+
+                // 在发送 “协议1-用户信息”
+                temp = "";
+                sendMsg = "";
+                UserInfo user_if;
+                user_if.set_userid(tourist_id);
+                user_if.set_username(tourist_username);
+                user_if.set_score(0);
+                user_if.SerializeToString(&temp);
+                sendMsg = std::to_string(sendMsgToClient::UserInfoCode) + temp;
+                sendMsg[0] = sendMsg[0] - '0';
+                SendMessages(sendMsg);
+
+                log_buffer = '[' + TimeServices::getTime() + "  Login Succeed]:\tTourist <" + tourist_account +
+                             "> Login Succeed, id is " + std::to_string(tourist_id) + "!";
+                LogServices::getInstance()->RecordingBoth(log_buffer, true);
+            }
+            else {
+                // 数据插入失败
+                std::string log_buffer;
+                log_buffer = '[' + TimeServices::getTime() + "  Signup Error]:\tCan't create new tourist account!";
+                LogServices::getInstance()->RecordingBoth(log_buffer, false);
+            }
         }
         else {
             // 其他情况
