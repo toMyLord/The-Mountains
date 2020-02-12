@@ -120,7 +120,7 @@ void LoginSession::TouristLoginHandler(const std::string & buffer) {
             std::string log_buffer;
             log_buffer = '[' + TimeServices::getTime() + "  Login Succeed]:\tTourist <" + tourist_login.account() +
                          "> Login Succeed, id is " + std::to_string(user_info.userid()) + "!";
-            LogServices::getInstance()->RecordingBoth(log_buffer, false);
+            LogServices::getInstance()->RecordingBoth(log_buffer, true);
         }
         else if (res.size() == 0) {
             // 未找到对应游客，需要建立游客账号并返回给客户端
@@ -200,13 +200,90 @@ void LoginSession::TouristLoginHandler(const std::string & buffer) {
 }
 
 void LoginSession::RegisterLoginHandler(const std::string & buffer) {
-    std::cout << "3 sleeping 10s!\n";
+    RegisterLogin register_lg;
+    register_lg.ParseFromArray(buffer.c_str(), buffer.size());
 
+    // 连接到数据库
+    DatabaseService db;
+    mysqlpp::Connection * conn = db.getConnection();
+
+    std::string query_buffer = "SELECT MAX(id) FROM the_mountains.User_Info";
+    mysqlpp::Query query_1 = conn->query(query_buffer.c_str());
+    mysqlpp::StoreQueryResult res_1 = query_1.store();
+    long register_id = res_1[0][0] + 1;         // 最大id号+1作为新的账号的id
+
+    // 将新生成的用户数据插入数据库
+    query_buffer = "INSERT INTO the_mountains.User_Info VALUES(\'" + std::to_string(register_id) +
+                   "\', \'" + register_lg.account() + "\', \'" + register_lg.password() + "\', \'\', \'" +
+                    register_lg.email() + "\', \'0\')";
+    mysqlpp::Query query_2 = conn->query(query_buffer.c_str());
+    if (query_2.exec()) {
+        // 数据插入成功
+        UserInfo user_if;
+        user_if.set_username("");
+        user_if.set_userid(register_id);
+        user_if.set_score(0);
+
+        std::string temp, sendMsg;
+        user_if.SerializeToString(&temp);
+        sendMsg = std::to_string(sendMsgToClient::UserInfoCode) + temp;
+        sendMsg[0] = sendMsg[0] - '0';
+
+        SendMessages(sendMsg);
+
+        std::string log_buffer;
+        log_buffer = '[' + TimeServices::getTime() + "  Login Succeed]:\tUser <" + register_lg.account() +
+                     "> Login Succeed, id is " + std::to_string(register_id) + "!";
+        LogServices::getInstance()->RecordingBoth(log_buffer, true);
+    }
+    else {
+        std::string log_buffer;
+        log_buffer = '[' + TimeServices::getTime() + "  SignUp Error]:\tCan't create new user account!";
+        LogServices::getInstance()->RecordingBoth(log_buffer, false);
+    }
 }
 
 void LoginSession::RegisterDetectHanlder(const std::string & buffer) {
-    std::cout << "4 sleeping 10s!\n";
+    RegisterDetect register_dt;
+    RegisterDetectFeedback register_dt_fb;
+    register_dt.ParseFromArray(buffer.c_str(), buffer.size());
 
+    DatabaseService db;
+    mysqlpp::Connection * conn = db.getConnection();
+
+    // 判断用户名是否存在
+    std::string query_buffer;
+    query_buffer = "SELECT * FROM the_mountains.User_Info WHERE account = \"" +
+            register_dt.account() + "\"";
+    mysqlpp::Query query_1 = conn->query(query_buffer.c_str());
+    mysqlpp::StoreQueryResult res_1 = query_1.store();
+
+    bool is_account_exit = (res_1.size() > 0);
+    register_dt_fb.set_isaccountexist(is_account_exit);
+
+    // 判断email是否存在
+    query_buffer = "SELECT * FROM the_mountains.User_Info WHERE email = \"" +
+                   register_dt.email() + "\"";
+    mysqlpp::Query query_2 = conn->query(query_buffer.c_str());
+    mysqlpp::StoreQueryResult res_2 = query_1.store();
+
+    bool is_email_exit = (res_2.size() > 0);
+    register_dt_fb.set_isemailexist(is_email_exit);
+
+    // 将判断结果返回给客户端
+    std::string temp, sendMsg;
+    register_dt_fb.SerializeToString(&temp);
+    sendMsg = std::to_string(sendMsgToClient::RegisterDetectFeedbackCode) + temp;
+    sendMsg[0] = sendMsg[0] - '0';
+
+    SendMessages(sendMsg);
+
+    // 志记
+    std::string log_buffer;
+    log_buffer = '[' + TimeServices::getTime() + "  Detect Result]:\tAccount <" + register_dt.account() +
+                 "> is " + (is_account_exit ? "already exist, " : "not exist, ") + "email <" +
+                 register_dt.email() + "< is" + + (is_email_exit ? "already exist, " : "not exist, ");
+    LogServices::getInstance()->RecordingBoth(log_buffer, false);
 }
 
 void LoginSession::quit_handler() {
