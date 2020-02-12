@@ -282,7 +282,7 @@ void LoginSession::RegisterDetectHanlder(const std::string & buffer) {
     std::string log_buffer;
     log_buffer = '[' + TimeServices::getTime() + "  Detect Result]:\tAccount <" + register_dt.account() +
                  "> is " + (is_account_exit ? "already exist, " : "not exist, ") + "email <" +
-                 register_dt.email() + "< is" + + (is_email_exit ? "already exist, " : "not exist, ");
+                 register_dt.email() + "> is " + + (is_email_exit ? "already exist, " : "not exist, ");
     LogServices::getInstance()->RecordingBoth(log_buffer, false);
 }
 
