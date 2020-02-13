@@ -15,9 +15,9 @@ int main(int argc, char * argv[]) {
         const int CORES_NUMBER = std::thread::hardware_concurrency();
         int login_thread_number, game_thread_number;
         // 根据线程数确定每个服务器分配多少线程
-        if (CORES_NUMBER <= 4) {
+        if (CORES_NUMBER <= 5) {
             login_thread_number = 2;
-            game_thread_number = 2;
+            game_thread_number = 3;
         } else {
             login_thread_number = 2;
             game_thread_number = CORES_NUMBER - 2;
