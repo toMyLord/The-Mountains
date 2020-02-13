@@ -5,10 +5,40 @@
 #include "AsyncSession.h"
 
 AsyncSession::AsyncSession(tcp::socket socket): socket_(std::move(socket)) {
+    this->ip_port = socket_.remote_endpoint().address().to_string() + ":" +
+                          std::to_string(socket_.remote_endpoint().port()) + ' ';
+    time(&recv_heartbeats_t);
 }
 
 void AsyncSession::SendMessages(const std::string & buffer) {
     boost::asio::write(socket_, boost::asio::buffer(buffer.c_str(), buffer.size()));
+}
+
+void AsyncSession::SendHeartBeats() {
+    time_t now;
+    time(&now);
+
+    // 如果超过5秒没有收到过心跳包，就断开连接
+    if (difftime(now, recv_heartbeats_t) > 5.0) {
+        std::string log_buffer;
+        log_buffer = '[' + TimeServices::getTime() + "  Heartbeats Missed]:\tCan't receive heartbeats from " +
+                socket_.remote_endpoint().address().to_string() + ':' +
+                std::to_string(socket_.remote_endpoint().port()) + " more than 5s!";
+        LogServices::getInstance()->RecordingBoth(log_buffer, false);
+
+        socket_.shutdown(tcp::socket::shutdown_both);
+        socket_.close();
+    }
+    else {
+        // 5s内收到过心跳包，就继续发送心跳。
+        std::string buffer = std::to_string(heart_beats_code);
+        buffer[0] = buffer[0] - '0';      // 发送1而不是字符‘1’。
+        SendMessages(buffer);
+    }
+}
+
+void AsyncSession::RecvHeartBeats() {
+    time(&recv_heartbeats_t);
 }
 
 void AsyncSession::StartSession() {
@@ -50,7 +80,7 @@ bool AsyncSession::error_code_handler(const boost::system::error_code &ec) {
             socket_.close();
 
             std::string log_buffer;
-            log_buffer = '[' + TimeServices::getTime() + "  Client Exit]:\t" + ec.message() + '.';
+            log_buffer = '[' + TimeServices::getTime() + "  Client Exit]:\t" + ip_port + ec.message() + '.';
             LogServices::getInstance()->RecordingBoth(log_buffer, true);
 
             quit_handler();
@@ -59,7 +89,7 @@ bool AsyncSession::error_code_handler(const boost::system::error_code &ec) {
         socket_.close();
 
         std::string log_buffer;
-        log_buffer = '[' + TimeServices::getTime() + "  Read Error]:\t" + ec.message() + ", connection closed.";
+        log_buffer = '[' + TimeServices::getTime() + "  Read Error]:\t" + ip_port + ec.message() + ", connection closed.";
         LogServices::getInstance()->RecordingBoth(log_buffer, false);
 
         quit_handler();

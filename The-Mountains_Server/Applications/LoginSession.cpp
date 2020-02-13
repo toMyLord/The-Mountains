@@ -22,7 +22,6 @@ void LoginSession::center_handler(std::string buffer) {
             LogServices::getInstance()->RecordingBoth(log_buffer, false);
         }
     }
-
 }
 
 void LoginSession::UserLoginHandler(const std::string & buffer) {

@@ -89,10 +89,18 @@ template<typename Session>
 void AsyncServer<Session>::HeartBeats_t() {
     while(client_info.size() > 0) {
         for(auto a : client_info){
-            (*a).SendMessages(std::string("heartbeats!"));
+            try {
+                (*a).SendHeartBeats();
+            }
+            catch (std::exception& e) {
+                std::string log_buffer;
+                log_buffer = '[' + TimeServices::getTime() +
+                        "  Exception Occurred]:\tException occurred during sending heartbeat!";
+                LogServices::getInstance()->RecordingBoth(log_buffer, false);
+            }
         }
 
-        sleep(3);
+        sleep(3);   // 每3s发送一次心跳包！
     }
     is_threaded = false;
     std::string log_buffer;

@@ -23,14 +23,21 @@ public:
 
     void SendMessages(const std::string & buffer);
 
+    void SendHeartBeats();
+
+    void RecvHeartBeats();
+
 protected:
 //    typedef void (AsyncSession::*handler)(std::string buffer);
 
     enum {
-        max_length = 1024
+        max_length = 1024,
+        heart_beats_code = 1
     };
     tcp::socket socket_;
     char buffer_[max_length];
+    time_t recv_heartbeats_t;
+    std::string ip_port;
 
     void do_read();
 
