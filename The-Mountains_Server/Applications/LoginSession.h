@@ -26,7 +26,6 @@ private:
 
     void RegisterDetectHanlder(const std::string & buffer);
 
-
     void quit_handler() override;
 
     enum recvMsgFromClient {

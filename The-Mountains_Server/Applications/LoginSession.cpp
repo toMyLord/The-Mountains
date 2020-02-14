@@ -296,6 +296,6 @@ void LoginSession::quit_handler() {
         client_info.erase(it);
 
     std::string log_buffer;
-    log_buffer = "\tclient num is : " + std::to_string(client_info.size());
+    log_buffer = "\tLogin Server's client number is : " + std::to_string(client_info.size());
     LogServices::getInstance()->RecordingBoth(log_buffer, true);
 }

@@ -28,7 +28,7 @@ protected:
 
     void do_accept();
 
-    virtual void accept_handler(tcp::socket socket);
+    virtual void accept_handler(tcp::socket socket) = 0;
 
     void HeartBeats_t();
 };
@@ -69,19 +69,6 @@ void AsyncServer<Session>::do_accept() {
                 do_accept();
             }
     );
-}
-
-template<typename Session>
-void AsyncServer<Session>::accept_handler(tcp::socket socket) {
-    std::string log_buffer;
-    log_buffer = '[' + TimeServices::getTime() + "  Connection Accepted]:\tAccept connection from " +
-                 socket.remote_endpoint().address().to_string() + ":" +
-                 std::to_string(socket.remote_endpoint().port()) + ".";
-    LogServices::getInstance()->RecordingBoth(log_buffer, true);
-
-    auto ptr = std::make_shared<Session>(std::move(socket), this->client_info);
-    client_info.push_back(ptr);
-    ptr->StartSession(); // 开始接受客户端的消息
 }
 
 // 后面需要增加心跳包的格式！

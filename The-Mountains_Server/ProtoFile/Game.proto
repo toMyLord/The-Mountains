@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+//Client to Server
+//协议号1，发心跳
+
+//协议号2，发送本机id给game服务器
+message UserInfoToGameServer
+{
+    int32 userid = 1;
+}
+
+//协议号3，修改用户信息	//TODO 后续可能加入用户头像，用户简介之类的
+message EditUserInfo
+{
+    string newUserName = 1;
+}
+
+//协议号4，匹配请求,匹配取消
+message MatchSwitchApplication
+{
+    int32 personNum = 1;	//0->取消匹配，3->3三人局，4->四人局，5->五人局
+}
+
+//协议号5，接受/拒绝进入房间
+message AcceptOrRefuse
+{
+    bool isAccept = 1;
+}
+
+
+//Server to Client
+//协议号1，发心跳
+
+//协议号2，名字修改成功	//TODO 加入新功能后需要反馈修改失败的具体信息
+message EditUserInfoFeedback
+{
+    bool isSuccessEdit = 1;	//false->修改失败，true->修改成功
+}
+
+//协议号3，匹配申请/取消确认
+
+//协议号4，匹配成功包
+
+//协议号5，匹配成功返回房间及玩家信息
+//message RoomInfo
+//{
+//}
