@@ -24,7 +24,7 @@ message MatchSwitchApplication
 //协议号5，接受/拒绝进入房间
 message AcceptOrRefuse
 {
-    bool isAccept = 1;
+    bool isAccept = 1;      // 只能接受，拒绝选项被废置
 }
 
 

@@ -5,8 +5,8 @@
 #include "GameSession.h"
 
 GameSession::GameSession(tcp::socket socket, std::vector<std::shared_ptr<GameSession>> & client,
-        std::queue<MatchClientNode<GameSession>> & match_3):
-        AsyncSession(std::move(socket)), client_info(client), match_queue_3(match_3) {
+        std::list<std::shared_ptr<MatchClientNode>> & match_3, std::vector<std::shared_ptr<GameRoom>> & room):
+        AsyncSession(std::move(socket)), client_info(client), match_queue_3(match_3), room_container(room) {
 }
 
 void GameSession::center_handler(std::string buffer) {
@@ -15,6 +15,7 @@ void GameSession::center_handler(std::string buffer) {
         case recvMsgFromClient::UserInfoToGameServerCode: UserInfoToGameServerHandler(buffer.substr(1)); break;
         case recvMsgFromClient::EditUserInfoCode: EditUserInfoHandler(buffer.substr(1)); break;
         case recvMsgFromClient::MatchSwitchApplicationCode: MatchSwitchApplicationHandler(buffer.substr(1)); break;
+        case recvMsgFromClient::AcceptOrRefuseCode: AcceptOrRefuseHandler(buffer.substr(1)); break;
         default: {
             std::string log_buffer;
             log_buffer = '[' + TimeServices::getTime() + "   Error]:\tGame Server can't parse client login request!";
@@ -75,7 +76,54 @@ void GameSession::EditUserInfoHandler(std::string buffer) {
 }
 
 void GameSession::MatchSwitchApplicationHandler(std::string buffer) {
+    do_read();
 
+    MatchSwitchApplication match_sw;
+    match_sw.ParseFromArray(buffer.c_str(), buffer.size());
+    if(match_sw.personnum() == 0) {
+        // 取消匹配
+        auto it = std::find_if(match_queue_3.begin(), match_queue_3.end(),
+                [this](const std::list<std::shared_ptr<MatchClientNode>>::value_type & compare) {
+            return compare->client == shared_from_this(); });
+
+        match_queue_3.erase(it);
+
+        status = BeforeMatch;
+
+        std::string sendMsg = std::to_string(sendMsgToClient::MatchConfirmCode);
+        sendMsg[0] = sendMsg[0] - '0';
+        SendMessages(sendMsg);
+
+        std::string log_buffer;
+        log_buffer = '[' + TimeServices::getTime() + "  Cancel Matching]:\t" + ip_port +
+                     " is cancel matching, " + std::to_string(match_queue_3.size()) + " user is in match queue!";
+        LogServices::getInstance()->RecordingBoth(log_buffer, false);
+
+    }
+    else if (match_sw.personnum() == 3){
+        // 三人房匹配
+        auto it = std::find(client_info.begin(), client_info.end(), shared_from_this());
+
+        auto match_client = std::make_shared<MatchClientNode>();
+        match_client->client = *it;
+
+        match_queue_3.push_back(match_client);
+
+        status = clientStatus::Matching;
+
+        std::string sendMsg = std::to_string(sendMsgToClient::MatchConfirmCode);
+        sendMsg[0] = sendMsg[0] - '0';
+        SendMessages(sendMsg);
+
+        std::string log_buffer;
+        log_buffer = '[' + TimeServices::getTime() + "  Start Matching]:\t" + ip_port +
+                     " is start matching, " + std::to_string(match_queue_3.size()) + " user is in match queue!";
+        LogServices::getInstance()->RecordingBoth(log_buffer, false);
+    }
+}
+
+void GameSession::AcceptOrRefuseHandler(std::string buffer) {
+    status = InTheGame;
 }
 
 void GameSession::quit_handler() {
@@ -85,9 +133,20 @@ void GameSession::quit_handler() {
         log_buffer = '[' + TimeServices::getTime() + "  Quit Error]:\tclient information not found!";
         LogServices::getInstance()->RecordingBoth(log_buffer, false);
     }
-    else
-        client_info.erase(it);
+    else {
+        if((*it)->status == Matching) {
+            // 如果正在匹配中
+            auto match_3_it = std::find_if(match_queue_3.begin(), match_queue_3.end(),
+                                   [this](const std::list<std::shared_ptr<MatchClientNode>>::value_type & compare) {
+                                       return compare->client == shared_from_this(); });
 
+            match_queue_3.erase(match_3_it);
+        }
+        else if((*it)->status == InTheGame) {
+            // 如果正在游戏中
+        }
+        client_info.erase(it);
+    }
     std::string log_buffer;
     log_buffer = "\tGame Server's client number is : " + std::to_string(client_info.size());
     LogServices::getInstance()->RecordingBoth(log_buffer, true);
