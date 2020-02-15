@@ -150,7 +150,7 @@ void GameSession::quit_handler() {
                                             return compare->game_content->OffLine(shared_from_this());
                                         });
 
-            // game_room 是有掉线用户的room
+            // game_room 是有掉线用户的room的迭代器
         }
         client_info.erase(it);
     }

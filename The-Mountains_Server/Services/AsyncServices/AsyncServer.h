@@ -82,7 +82,7 @@ void AsyncServer<Session>::HeartBeats_t() {
             catch (std::exception& e) {
                 std::string log_buffer;
                 log_buffer = '[' + TimeServices::getTime() +
-                        "  Exception Occurred]:\tException occurred during sending heartbeat!";
+                        "  Exception Occurred]:\tException occurred during sending heartbeat: " + e.what();
                 LogServices::getInstance()->RecordingBoth(log_buffer, false);
             }
         }
