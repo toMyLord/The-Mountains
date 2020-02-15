@@ -39,3 +39,13 @@ void GameContent::start() {
     log_buffer = '[' + TimeServices::getTime() + "  Game Setup]:\t Game Setuped!";
     LogServices::getInstance()->RecordingBoth(log_buffer, true);
 }
+
+bool GameContent::OffLine(const std::shared_ptr<AsyncSession> & offline_player) {
+    for(int i = 0; i < player_number; i++) {
+        if(player[i] == offline_player) {
+            player[i] = nullptr;
+
+            return true;
+        }
+    }
+}

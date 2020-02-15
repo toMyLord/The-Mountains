@@ -3,6 +3,7 @@
 //
 
 #include "GameSession.h"
+#include "GameContent.h"
 
 GameSession::GameSession(tcp::socket socket, std::vector<std::shared_ptr<GameSession>> & client,
         std::list<std::shared_ptr<MatchClientNode>> & match_3, std::vector<std::shared_ptr<GameRoom>> & room):
@@ -144,6 +145,12 @@ void GameSession::quit_handler() {
         }
         else if((*it)->status == InTheGame) {
             // 如果正在游戏中
+            auto game_room = std::find_if(room_container.begin(), room_container.end(),
+                                   [this](const std::vector<std::shared_ptr<GameRoom>>::value_type & compare) {
+                                            return compare->game_content->OffLine(shared_from_this());
+                                        });
+
+            // game_room 是有掉线用户的room
         }
         client_info.erase(it);
     }

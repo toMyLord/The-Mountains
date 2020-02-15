@@ -23,6 +23,8 @@ public:
 
     void start();
 
+    bool OffLine(const std::shared_ptr<AsyncSession> & offline_player);
+
 private:
     std::shared_ptr<GameSession> player[5];
     int player_number;
