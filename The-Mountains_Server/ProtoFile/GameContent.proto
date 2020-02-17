@@ -11,6 +11,7 @@ message PlayerOperation	//协议7,玩家操作包
         Compound = 0;
         Transfer = 1;
         Use = 2;
+        Skip = 3;	//跳过本回合
     }
     OperationType operation = 2;
     enum CardType
@@ -26,6 +27,14 @@ message PlayerOperation	//协议7,玩家操作包
     CardType card = 3;	//要合成的卡牌
 }
 
+//协议8，CandleCardFeedback	玩家接收后判断如果下家是自己就发送这个包
+
+//协议9， GameFinish 游戏结束
+
+//协议10，重连确认，准备接收服务器操作队列 ReconnectionConfirm
+
+
+
 //Server to Client
 message RoomInfo	//协议号5，房间信息
 {
@@ -36,7 +45,7 @@ message RoomInfo	//协议号5，房间信息
     int32 woodNum = 5;
     int32 fogNum = 6;
     int32 witchNum = 7;
-    int32 currOperationPlayerNum = 8;	//当前回合出牌玩家序号
+//    int32 currOperationPlayerNum = 8;	//当前回合出牌玩家序号
 }
 
 message OtherPlayerInfo	//协议号6，房间玩家信息,发送数量（n - 1）
@@ -97,7 +106,15 @@ message CandleCardFeedback	//协议9，烛牌反馈包，包含下家的手牌�
     int32 candleNum = 4;
     int32 woodNum = 5;
     int32 fogNum = 6;
+    int32 seatNum = 7;
     //int32 witchNum = 7;
 }
 
-//协议10，复用PlayerOperation玩家操作包（Client to Server协议7）
+//协议10，广播 PlayerOperation 玩家操作包（Client to Server协议7）
+
+//协议11，掉线
+//协议12，重连，掉线玩家的房间玩家信息全都收到发送
+message OffLineOrOnLine
+{
+    int32 seatNum = 1;
+}
