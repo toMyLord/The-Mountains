@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+//Client to Server
+//协议号6,房间信息抵达 RoomInfoArrived
+
+message PlayerOperation	//协议7,玩家操作包
+{
+    int32 seatNum = 1;	//进行该操作的玩家座位号
+    enum OperationType	//本轮操作类型
+    {
+        Compound = 0;
+        Transfer = 1;
+        Use = 2;
+    }
+    OperationType operation = 2;
+    enum CardType
+    {
+        Water = 0;
+        Fire = 1;
+        Light = 2;
+        Candle = 3;
+        Wood = 4;
+        Fog = 5;
+        Witch = 6;
+    }
+    CardType card = 3;	//要合成的卡牌
+}
+
+//Server to Client
+message RoomInfo	//协议号5，房间信息
+{
+    int32 roomID = 1;
+    int32 time = 2;
+    int32 playerNum = 3;
+    int32 candleNum = 4;
+    int32 woodNum = 5;
+    int32 fogNum = 6;
+    int32 witchNum = 7;
+    int32 currOperationPlayerNum = 8;	//当前回合出牌玩家序号
+}
+
+message OtherPlayerInfo	//协议号6，房间玩家信息,发送数量（n - 1）
+{
+    //int32 id;
+    string name = 1;
+    int32 score = 2;
+    int32 seatNum = 3;	//座位号
+    int32 cardNum = 4;	//持有手牌数
+    int32 witchNum = 5;	//持有巫牌数
+    enum PlayerStatus	//玩家当前状态
+    {
+        Normal = 0;
+        Wood = 1;
+        Fog = 2;
+    }
+    PlayerStatus CurrPlayerStatus = 6;
+}
+
+message LocalPlayerInfo	//协议7，本机玩家信息
+{
+    int32 cardNum = 1;
+    int32 waterNum = 2;
+    int32 fireNum = 3;
+    int32 lightNum = 4;
+    int32 candleNum = 5;
+    int32 woodNum = 6;
+    int32 fogNum = 7;
+    int32 witchNum = 8;
+    enum PlayerStatus	//玩家当前状态
+    {
+        Normal = 0;
+        Wood = 1;
+        Fog = 2;
+    }
+    PlayerStatus CurrPlayerStatus = 9;
+    int32 seatNum = 10;
+}
+
+message GameFinish	//协议号8，一轮游戏结束的包
+{
+    int32 seatNum = 1;
+    int32 waterNum = 2;
+    int32 fireNum = 3;
+    int32 lightNum = 4;
+    int32 candleNum = 5;
+    int32 woodNum = 6;
+    int32 fogNum = 7;
+    int32 witchNum = 8;
+    int32 gameScore = 9;
+}
+
+message CandleCardFeedback	//协议9，烛牌反馈包，包含下家的手牌信息
+{
+    int32 waterNum = 1;
+    int32 fireNum = 2;
+    int32 lightNum = 3;
+    int32 candleNum = 4;
+    int32 woodNum = 5;
+    int32 fogNum = 6;
+    //int32 witchNum = 7;
+}
+
+//协议10，复用PlayerOperation玩家操作包（Client to Server协议7）

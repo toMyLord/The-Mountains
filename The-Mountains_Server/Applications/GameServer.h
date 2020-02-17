@@ -5,7 +5,7 @@
 #ifndef THE_MOUNTAINS_SERVER_GAMESERVER_H
 #define THE_MOUNTAINS_SERVER_GAMESERVER_H
 
-#include "GameContent.h"
+#include "GameRoom.h"
 #include "../Services/AsyncServices/AsyncServer.h"
 
 template <typename Session>
@@ -20,9 +20,6 @@ private:
     void accept_handler(tcp::socket socket) override;
 
     void MatchDetect_t();
-
-    void GameContent_3_t(std::shared_ptr<GameSession> player1, std::shared_ptr<GameSession> player2,
-            std::shared_ptr<GameSession> player3);
 };
 
 template<typename Session>
@@ -53,37 +50,28 @@ void GameServer<Session>::MatchDetect_t() {
     while(true) {
         if (match_queue_3.size() >= 3) {
             std::shared_ptr<MatchClientNode> user[3];
-            for(int i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
                 user[i] = match_queue_3.front();
                 match_queue_3.pop_front();
+            }
 
+            //建立游戏内容类的容器 房间号还没设置
+            int room_id = 0;
+            auto ptr = std::make_shared<GameRoom>(3, room_id,user[0]->client, user[1]->client, user[2]->client);
+            room_container.push_back(ptr);
+
+            for (int i = 0; i < 3; i++) {
                 std::string sendMsg = std::to_string(GameSession::sendMsgToClient::MatchSucceedCode);
                 sendMsg[0] = sendMsg[0] - '0';
                 user[i]->client->SendMessages(sendMsg);
             }
 
-            //建立游戏内容类 需要改进！！！ 容器
-            std::thread game_3_t(&GameServer::GameContent_3_t, this, user[0]->client, user[1]->client, user[2]->client);
-            game_3_t.detach();
+            ptr->start();
         }
         else {
             sleep(1);
         }
     }
-}
-
-template<typename Session>
-void GameServer<Session>::GameContent_3_t(std::shared_ptr<GameSession> player1, std::shared_ptr<GameSession> player2,
-                     std::shared_ptr<GameSession> player3) {
-    int room_number = 0;
-
-    // 还没设置房间号
-    auto ptr = std::make_shared<GameRoom>(
-            std::make_shared<GameContent>(3, player1, player2, player3, nullptr, nullptr), room_number);
-
-    room_container.push_back(ptr);
-
-    ptr->game_content->start();
 }
 
 #endif //THE_MOUNTAINS_SERVER_GAMESERVER_H

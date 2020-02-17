@@ -50,6 +50,8 @@ private:
     std::list<std::shared_ptr<MatchClientNode>> & match_queue_3;
     std::vector<std::shared_ptr<GameRoom>> & room_container;
 
+    std::shared_ptr<GameRoom> game_room;
+
     void center_handler(std::string buffer) override ;
 
     // 在此函数中确定了client状态为BeforeMatch
@@ -62,6 +64,12 @@ private:
 
     // 经过此函数后就不再通过do_read函数捕获消息，并且切换状态为InTheGame
     void AcceptOrRefuseHandler(std::string buffer);
+
+    void StartGame();
+
+    void game_read();
+
+    void game_handler(std::string buffer);
 
     void quit_handler() override;
 

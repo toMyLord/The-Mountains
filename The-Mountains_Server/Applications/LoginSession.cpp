@@ -54,7 +54,7 @@ void LoginSession::UserLoginHandler(const std::string & buffer) {
             std::string log_buffer;
             log_buffer = '[' + TimeServices::getTime() + "  Login Succeed]:\tUser <" + user_login.account() +
                     "> Login Succeed, id is " + std::to_string(user_info.userid()) + "!";
-            LogServices::getInstance()->RecordingBoth(log_buffer, false);
+            LogServices::getInstance()->RecordingBoth(log_buffer, true);
         }
         else if (res.size() == 0) {
             // 未找到对应用户

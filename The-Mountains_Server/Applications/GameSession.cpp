@@ -3,7 +3,7 @@
 //
 
 #include "GameSession.h"
-#include "GameContent.h"
+#include "GameRoom.h"
 
 GameSession::GameSession(tcp::socket socket, std::vector<std::shared_ptr<GameSession>> & client,
         std::list<std::shared_ptr<MatchClientNode>> & match_3, std::vector<std::shared_ptr<GameRoom>> & room):
@@ -119,12 +119,47 @@ void GameSession::MatchSwitchApplicationHandler(std::string buffer) {
         std::string log_buffer;
         log_buffer = '[' + TimeServices::getTime() + "  Start Matching]:\t" + ip_port +
                      " is start matching, " + std::to_string(match_queue_3.size()) + " user is in match queue!";
-        LogServices::getInstance()->RecordingBoth(log_buffer, false);
+        LogServices::getInstance()->RecordingBoth(log_buffer, true);
     }
 }
 
 void GameSession::AcceptOrRefuseHandler(std::string buffer) {
     status = InTheGame;
+
+    auto self = shared_from_this();
+    auto it = std::find_if(room_container.rbegin(), room_container.rend(),
+            [self](const std::shared_ptr<GameRoom> & compare){ return compare->isInThisRoom(self); });
+    this->game_room = *it;
+
+    StartGame();
+}
+
+void GameSession::StartGame() {
+    game_read();
+}
+
+void GameSession::game_read() {
+    auto self = shared_from_this();
+    socket_.async_read_some(boost::asio::buffer(buffer_, max_length),
+                            [this, self](const boost::system::error_code & ec, std::size_t length) {
+                                // 捕获`self`使shared_ptr<session>的引用计数增加1，在该例中避免了async_read()退出时其引用计数变为0
+                                buffer_[length] = '\0';
+                                std::string buffer(buffer_);
+
+                                if(!error_code_handler(ec)) return;
+
+                                game_handler(buffer);
+                            });
+}
+
+void GameSession::game_handler(std::string buffer) {
+    switch(buffer[0]) {
+        case heart_beats_code: RecvHeartBeats(); do_read(); break;
+        default: {
+            // 将收到的游戏包转发给GameRoom类
+            this->game_room->MsgCenter(shared_from_this(), buffer);
+        }
+    }
 }
 
 void GameSession::quit_handler() {
@@ -135,24 +170,25 @@ void GameSession::quit_handler() {
         LogServices::getInstance()->RecordingBoth(log_buffer, false);
     }
     else {
+        client_info.erase(it);
+
         if((*it)->status == Matching) {
             // 如果正在匹配中
             auto match_3_it = std::find_if(match_queue_3.begin(), match_queue_3.end(),
                                    [this](const std::list<std::shared_ptr<MatchClientNode>>::value_type & compare) {
                                        return compare->client == shared_from_this(); });
-
-            match_queue_3.erase(match_3_it);
+            if (match_3_it != match_queue_3.end())
+                match_queue_3.erase(match_3_it);
         }
         else if((*it)->status == InTheGame) {
             // 如果正在游戏中
             auto game_room = std::find_if(room_container.begin(), room_container.end(),
                                    [this](const std::vector<std::shared_ptr<GameRoom>>::value_type & compare) {
-                                            return compare->game_content->OffLine(shared_from_this());
+                                            return compare->OffLine(shared_from_this());
                                         });
 
             // game_room 是有掉线用户的room的迭代器
         }
-        client_info.erase(it);
     }
     std::string log_buffer;
     log_buffer = "\tGame Server's client number is : " + std::to_string(client_info.size());

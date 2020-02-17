@@ -2,21 +2,21 @@
 // Created by mylord on 2020/2/15.
 //
 
-#include "GameContent.h"
+#include "GameRoom.h"
 
-GameContent::GameContent(int player_num , std::shared_ptr<GameSession> player1,
-            std::shared_ptr<GameSession> player2, std::shared_ptr<GameSession> player3,
-            std::shared_ptr<GameSession> player4, std::shared_ptr<GameSession> player5) :
-            player_number(player_num), player{player1, player2, player3, player4, player5} {
+GameRoom::GameRoom(int player_num, int room_num, std::shared_ptr<GameSession> player1,
+                   std::shared_ptr<GameSession> player2, std::shared_ptr<GameSession> player3,
+                   std::shared_ptr<GameSession> player4, std::shared_ptr<GameSession> player5) :
+            player_number(player_num), room_id(room_num), player{player1, player2, player3, player4, player5} {
 }
 
-void GameContent::sendMsgToAll(const std::string & buffer) {
+void GameRoom::sendMsgToAll(const std::string & buffer) {
     for(int i = 0; i < player_number; i++) {
         player[i]->SendMessages(buffer);
     }
 }
 
-void GameContent::start() {
+void GameRoom::start() {
     while(true) {
         int ready_number = 0;
         // 需要完善此时掉线的情况！
@@ -40,7 +40,19 @@ void GameContent::start() {
     LogServices::getInstance()->RecordingBoth(log_buffer, true);
 }
 
-bool GameContent::OffLine(const std::shared_ptr<AsyncSession> & offline_player) {
+bool GameRoom::isInThisRoom(const std::shared_ptr<AsyncSession> & compare_player) {
+    for(int i = 0; i < player_number; i++) {
+        if(player[i] == compare_player)
+            return true;
+    }
+    return false;
+}
+
+void GameRoom::MsgCenter(const std::shared_ptr<AsyncSession> & game_player, const std::string & buffer) {
+
+}
+
+bool GameRoom::OffLine(const std::shared_ptr<AsyncSession> & offline_player) {
     for(int i = 0; i < player_number; i++) {
         if(player[i] == offline_player) {
             player[i] = nullptr;
