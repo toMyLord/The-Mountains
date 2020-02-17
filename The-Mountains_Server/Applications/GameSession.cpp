@@ -11,23 +11,28 @@ GameSession::GameSession(tcp::socket socket, std::vector<std::shared_ptr<GameSes
 }
 
 void GameSession::center_handler(std::string buffer) {
+    do_read();
+
     switch(buffer[0]) {
-        case heart_beats_code: RecvHeartBeats(); do_read(); break;
+        case heart_beats_code: RecvHeartBeats(); break;
         case recvMsgFromClient::UserInfoToGameServerCode: UserInfoToGameServerHandler(buffer.substr(1)); break;
         case recvMsgFromClient::EditUserInfoCode: EditUserInfoHandler(buffer.substr(1)); break;
         case recvMsgFromClient::MatchSwitchApplicationCode: MatchSwitchApplicationHandler(buffer.substr(1)); break;
         case recvMsgFromClient::AcceptOrRefuseCode: AcceptOrRefuseHandler(buffer.substr(1)); break;
+        case GameRoom::recvMsgFromClient::RoomInfoArrivedCode: this->game_room->SendPlayerInfo(shared_from_this()); break;
+        case GameRoom::recvMsgFromClient::PlayerOperationCode: this->game_room->PlayerOperationHandler(buffer); break;
+        case GameRoom::recvMsgFromClient::CandleCardFeedbackCode: this->game_room->CandleCardFeedbackHandler(buffer); break;
+        case GameRoom::recvMsgFromClient::GameFinishCode: GameFinishHandler(buffer.substr(1)); break;
         default: {
             std::string log_buffer;
-            log_buffer = '[' + TimeServices::getTime() + "   Error]:\tGame Server can't parse client login request!";
+            log_buffer = '[' + TimeServices::getTime() + "  Parse Error]:\t" + ip_port +
+                         " can't pares message!";
             LogServices::getInstance()->RecordingBoth(log_buffer, false);
         }
     }
 }
 
 void GameSession::UserInfoToGameServerHandler(std::string buffer) {
-    do_read();
-
     status = clientStatus::BeforeMatch;     //确定状态为进入匹配前的状态
 
     UserInfoToGameServer user_info;
@@ -37,8 +42,6 @@ void GameSession::UserInfoToGameServerHandler(std::string buffer) {
 }
 
 void GameSession::EditUserInfoHandler(std::string buffer) {
-    do_read();
-
     EditUserInfo edit_info;
     EditUserInfoFeedback edit_fb;
     edit_info.ParseFromArray(buffer.c_str(), buffer.size());
@@ -77,8 +80,6 @@ void GameSession::EditUserInfoHandler(std::string buffer) {
 }
 
 void GameSession::MatchSwitchApplicationHandler(std::string buffer) {
-    do_read();
-
     MatchSwitchApplication match_sw;
     match_sw.ParseFromArray(buffer.c_str(), buffer.size());
     if(match_sw.personnum() == 0) {
@@ -124,49 +125,37 @@ void GameSession::MatchSwitchApplicationHandler(std::string buffer) {
 }
 
 void GameSession::AcceptOrRefuseHandler(std::string buffer) {
-    status = InTheGame;
-
     auto self = shared_from_this();
     auto it = std::find_if(room_container.rbegin(), room_container.rend(),
             [self](const std::shared_ptr<GameRoom> & compare){ return compare->isInThisRoom(self); });
     this->game_room = *it;
 
-    StartGame();
+    status = InTheGame;
 }
 
-void GameSession::StartGame() {
-    game_read();
-}
+void GameSession::GameFinishHandler(std::string buffer) {
+    std::string temp = std::to_string(GameRoom::sendMsgToClient::GameFinishCode_) + buffer;
+    temp[0] = temp[0] - '0';
+    game_room->sendMsgToAll(temp);
 
-void GameSession::game_read() {
-    auto self = shared_from_this();
-    socket_.async_read_some(boost::asio::buffer(buffer_, max_length),
-                            [this, self](const boost::system::error_code & ec, std::size_t length) {
-                                // 捕获`self`使shared_ptr<session>的引用计数增加1，在该例中避免了async_read()退出时其引用计数变为0
-                                buffer_[length] = '\0';
-                                std::string buffer(buffer_);
+    int room_id = game_room->GameFinishHandler(buffer);
 
-                                if(!error_code_handler(ec)) return;
+    // 注销房间
+    auto it = find_if(room_container.begin(), room_container.end(),
+            [room_id](const std::shared_ptr<GameRoom> & compare){ return compare->getRoomID() == room_id; });
+    room_container.erase(it);
 
-                                game_handler(buffer);
-                            });
-}
-
-void GameSession::game_handler(std::string buffer) {
-    switch(buffer[0]) {
-        case heart_beats_code: RecvHeartBeats(); do_read(); break;
-        default: {
-            // 将收到的游戏包转发给GameRoom类
-            this->game_room->MsgCenter(shared_from_this(), buffer);
-        }
-    }
+    std::string log_buffer;
+    log_buffer = '[' + TimeServices::getTime() + "  Game Over]:\tGame over, room<" +
+            std::to_string(room_id) + "> is destroyed!";
+    LogServices::getInstance()->RecordingBoth(log_buffer, true);
 }
 
 void GameSession::quit_handler() {
     auto it = std::find(client_info.begin(), client_info.end(), shared_from_this());
     if(it == client_info.end()) {
         std::string log_buffer;
-        log_buffer = '[' + TimeServices::getTime() + "  Quit Error]:\tclient information not found!";
+        log_buffer = '[' + TimeServices::getTime() + "  Quit Error]:\tClient information not found!";
         LogServices::getInstance()->RecordingBoth(log_buffer, false);
     }
     else {
@@ -184,7 +173,7 @@ void GameSession::quit_handler() {
             // 如果正在游戏中
             auto game_room = std::find_if(room_container.begin(), room_container.end(),
                                    [this](const std::vector<std::shared_ptr<GameRoom>>::value_type & compare) {
-                                            return compare->OffLine(shared_from_this());
+                                            return compare->isOffLine(shared_from_this());
                                         });
 
             // game_room 是有掉线用户的room的迭代器

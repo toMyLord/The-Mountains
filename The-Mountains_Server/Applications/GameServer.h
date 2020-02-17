@@ -20,11 +20,13 @@ private:
     void accept_handler(tcp::socket socket) override;
 
     void MatchDetect_t();
+
+    int room_id;
 };
 
 template<typename Session>
 GameServer<Session>::GameServer(boost::asio::io_context &io_context, short port, bool is_beats)
-        : AsyncServer<Session>(io_context, port, is_beats) {
+        : AsyncServer<Session>(io_context, port, is_beats), room_id(1) {
 }
 
 template<typename Session>
@@ -56,9 +58,10 @@ void GameServer<Session>::MatchDetect_t() {
             }
 
             //建立游戏内容类的容器 房间号还没设置
-            int room_id = 0;
             auto ptr = std::make_shared<GameRoom>(3, room_id,user[0]->client, user[1]->client, user[2]->client);
             room_container.push_back(ptr);
+
+            if(room_id == INT_MAX) room_id = 1;
 
             for (int i = 0; i < 3; i++) {
                 std::string sendMsg = std::to_string(GameSession::sendMsgToClient::MatchSucceedCode);

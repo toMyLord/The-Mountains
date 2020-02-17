@@ -48,7 +48,7 @@ struct TableStruct_GameContent_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[7]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -64,6 +64,9 @@ extern GameFinishDefaultTypeInternal _GameFinish_default_instance_;
 class LocalPlayerInfo;
 class LocalPlayerInfoDefaultTypeInternal;
 extern LocalPlayerInfoDefaultTypeInternal _LocalPlayerInfo_default_instance_;
+class OffLineOrOnLine;
+class OffLineOrOnLineDefaultTypeInternal;
+extern OffLineOrOnLineDefaultTypeInternal _OffLineOrOnLine_default_instance_;
 class OtherPlayerInfo;
 class OtherPlayerInfoDefaultTypeInternal;
 extern OtherPlayerInfoDefaultTypeInternal _OtherPlayerInfo_default_instance_;
@@ -77,6 +80,7 @@ PROTOBUF_NAMESPACE_OPEN
 template<> ::CandleCardFeedback* Arena::CreateMaybeMessage<::CandleCardFeedback>(Arena*);
 template<> ::GameFinish* Arena::CreateMaybeMessage<::GameFinish>(Arena*);
 template<> ::LocalPlayerInfo* Arena::CreateMaybeMessage<::LocalPlayerInfo>(Arena*);
+template<> ::OffLineOrOnLine* Arena::CreateMaybeMessage<::OffLineOrOnLine>(Arena*);
 template<> ::OtherPlayerInfo* Arena::CreateMaybeMessage<::OtherPlayerInfo>(Arena*);
 template<> ::PlayerOperation* Arena::CreateMaybeMessage<::PlayerOperation>(Arena*);
 template<> ::RoomInfo* Arena::CreateMaybeMessage<::RoomInfo>(Arena*);
@@ -86,12 +90,13 @@ enum PlayerOperation_OperationType : int {
   PlayerOperation_OperationType_Compound = 0,
   PlayerOperation_OperationType_Transfer = 1,
   PlayerOperation_OperationType_Use = 2,
+  PlayerOperation_OperationType_Skip = 3,
   PlayerOperation_OperationType_PlayerOperation_OperationType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   PlayerOperation_OperationType_PlayerOperation_OperationType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool PlayerOperation_OperationType_IsValid(int value);
 constexpr PlayerOperation_OperationType PlayerOperation_OperationType_OperationType_MIN = PlayerOperation_OperationType_Compound;
-constexpr PlayerOperation_OperationType PlayerOperation_OperationType_OperationType_MAX = PlayerOperation_OperationType_Use;
+constexpr PlayerOperation_OperationType PlayerOperation_OperationType_OperationType_MAX = PlayerOperation_OperationType_Skip;
 constexpr int PlayerOperation_OperationType_OperationType_ARRAYSIZE = PlayerOperation_OperationType_OperationType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlayerOperation_OperationType_descriptor();
@@ -302,6 +307,8 @@ class PlayerOperation :
     PlayerOperation_OperationType_Transfer;
   static constexpr OperationType Use =
     PlayerOperation_OperationType_Use;
+  static constexpr OperationType Skip =
+    PlayerOperation_OperationType_Skip;
   static inline bool OperationType_IsValid(int value) {
     return PlayerOperation_OperationType_IsValid(value);
   }
@@ -1428,6 +1435,7 @@ class CandleCardFeedback :
     kCandleNumFieldNumber = 4,
     kWoodNumFieldNumber = 5,
     kFogNumFieldNumber = 6,
+    kSeatNumFieldNumber = 7,
   };
   // int32 waterNum = 1;
   void clear_waternum();
@@ -1483,6 +1491,15 @@ class CandleCardFeedback :
   void _internal_set_fognum(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 seatNum = 7;
+  void clear_seatnum();
+  ::PROTOBUF_NAMESPACE_ID::int32 seatnum() const;
+  void set_seatnum(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_seatnum() const;
+  void _internal_set_seatnum(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CandleCardFeedback)
  private:
   class _Internal;
@@ -1494,6 +1511,135 @@ class CandleCardFeedback :
   ::PROTOBUF_NAMESPACE_ID::int32 candlenum_;
   ::PROTOBUF_NAMESPACE_ID::int32 woodnum_;
   ::PROTOBUF_NAMESPACE_ID::int32 fognum_;
+  ::PROTOBUF_NAMESPACE_ID::int32 seatnum_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_GameContent_2eproto;
+};
+// -------------------------------------------------------------------
+
+class OffLineOrOnLine :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:OffLineOrOnLine) */ {
+ public:
+  OffLineOrOnLine();
+  virtual ~OffLineOrOnLine();
+
+  OffLineOrOnLine(const OffLineOrOnLine& from);
+  OffLineOrOnLine(OffLineOrOnLine&& from) noexcept
+    : OffLineOrOnLine() {
+    *this = ::std::move(from);
+  }
+
+  inline OffLineOrOnLine& operator=(const OffLineOrOnLine& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline OffLineOrOnLine& operator=(OffLineOrOnLine&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const OffLineOrOnLine& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const OffLineOrOnLine* internal_default_instance() {
+    return reinterpret_cast<const OffLineOrOnLine*>(
+               &_OffLineOrOnLine_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(OffLineOrOnLine& a, OffLineOrOnLine& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(OffLineOrOnLine* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline OffLineOrOnLine* New() const final {
+    return CreateMaybeMessage<OffLineOrOnLine>(nullptr);
+  }
+
+  OffLineOrOnLine* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<OffLineOrOnLine>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const OffLineOrOnLine& from);
+  void MergeFrom(const OffLineOrOnLine& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(OffLineOrOnLine* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "OffLineOrOnLine";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_GameContent_2eproto);
+    return ::descriptor_table_GameContent_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSeatNumFieldNumber = 1,
+  };
+  // int32 seatNum = 1;
+  void clear_seatnum();
+  ::PROTOBUF_NAMESPACE_ID::int32 seatnum() const;
+  void set_seatnum(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_seatnum() const;
+  void _internal_set_seatnum(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:OffLineOrOnLine)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::int32 seatnum_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_GameContent_2eproto;
 };
@@ -2408,9 +2554,55 @@ inline void CandleCardFeedback::set_fognum(::PROTOBUF_NAMESPACE_ID::int32 value)
   // @@protoc_insertion_point(field_set:CandleCardFeedback.fogNum)
 }
 
+// int32 seatNum = 7;
+inline void CandleCardFeedback::clear_seatnum() {
+  seatnum_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CandleCardFeedback::_internal_seatnum() const {
+  return seatnum_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CandleCardFeedback::seatnum() const {
+  // @@protoc_insertion_point(field_get:CandleCardFeedback.seatNum)
+  return _internal_seatnum();
+}
+inline void CandleCardFeedback::_internal_set_seatnum(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  seatnum_ = value;
+}
+inline void CandleCardFeedback::set_seatnum(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_seatnum(value);
+  // @@protoc_insertion_point(field_set:CandleCardFeedback.seatNum)
+}
+
+// -------------------------------------------------------------------
+
+// OffLineOrOnLine
+
+// int32 seatNum = 1;
+inline void OffLineOrOnLine::clear_seatnum() {
+  seatnum_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 OffLineOrOnLine::_internal_seatnum() const {
+  return seatnum_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 OffLineOrOnLine::seatnum() const {
+  // @@protoc_insertion_point(field_get:OffLineOrOnLine.seatNum)
+  return _internal_seatnum();
+}
+inline void OffLineOrOnLine::_internal_set_seatnum(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  seatnum_ = value;
+}
+inline void OffLineOrOnLine::set_seatnum(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_seatnum(value);
+  // @@protoc_insertion_point(field_set:OffLineOrOnLine.seatNum)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

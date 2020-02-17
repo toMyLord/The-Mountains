@@ -33,8 +33,6 @@ protected:
     void HeartBeats_t();
 };
 
-
-
 template<typename Session>
 AsyncServer<Session>::AsyncServer(boost::asio::io_context &io_context, short port, bool is_beats)
         : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)), is_heartbeats(is_beats), is_threaded(false) {
@@ -71,7 +69,6 @@ void AsyncServer<Session>::do_accept() {
     );
 }
 
-// 后面需要增加心跳包的格式！
 template<typename Session>
 void AsyncServer<Session>::HeartBeats_t() {
     while(client_info.size() > 0) {

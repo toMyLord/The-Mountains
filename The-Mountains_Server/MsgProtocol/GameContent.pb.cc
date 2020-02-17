@@ -38,6 +38,10 @@ class CandleCardFeedbackDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<CandleCardFeedback> _instance;
 } _CandleCardFeedback_default_instance_;
+class OffLineOrOnLineDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<OffLineOrOnLine> _instance;
+} _OffLineOrOnLine_default_instance_;
 static void InitDefaultsscc_info_CandleCardFeedback_GameContent_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -79,6 +83,20 @@ static void InitDefaultsscc_info_LocalPlayerInfo_GameContent_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_LocalPlayerInfo_GameContent_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_LocalPlayerInfo_GameContent_2eproto}, {}};
+
+static void InitDefaultsscc_info_OffLineOrOnLine_GameContent_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_OffLineOrOnLine_default_instance_;
+    new (ptr) ::OffLineOrOnLine();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::OffLineOrOnLine::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_OffLineOrOnLine_GameContent_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_OffLineOrOnLine_GameContent_2eproto}, {}};
 
 static void InitDefaultsscc_info_OtherPlayerInfo_GameContent_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -122,7 +140,7 @@ static void InitDefaultsscc_info_RoomInfo_GameContent_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RoomInfo_GameContent_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_RoomInfo_GameContent_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_GameContent_2eproto[6];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_GameContent_2eproto[7];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_GameContent_2eproto[4];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_GameContent_2eproto = nullptr;
 
@@ -199,6 +217,13 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_GameContent_2eproto::offsets[]
   PROTOBUF_FIELD_OFFSET(::CandleCardFeedback, candlenum_),
   PROTOBUF_FIELD_OFFSET(::CandleCardFeedback, woodnum_),
   PROTOBUF_FIELD_OFFSET(::CandleCardFeedback, fognum_),
+  PROTOBUF_FIELD_OFFSET(::CandleCardFeedback, seatnum_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::OffLineOrOnLine, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::OffLineOrOnLine, seatnum_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::PlayerOperation)},
@@ -207,6 +232,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 32, -1, sizeof(::LocalPlayerInfo)},
   { 47, -1, sizeof(::GameFinish)},
   { 61, -1, sizeof(::CandleCardFeedback)},
+  { 73, -1, sizeof(::OffLineOrOnLine)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -216,48 +242,51 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_LocalPlayerInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_GameFinish_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_CandleCardFeedback_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_OffLineOrOnLine_default_instance_),
 };
 
 const char descriptor_table_protodef_GameContent_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\021GameContent.proto\"\212\002\n\017PlayerOperation\022"
+  "\n\021GameContent.proto\"\224\002\n\017PlayerOperation\022"
   "\017\n\007seatNum\030\001 \001(\005\0221\n\toperation\030\002 \001(\0162\036.Pl"
   "ayerOperation.OperationType\022\'\n\004card\030\003 \001("
-  "\0162\031.PlayerOperation.CardType\"4\n\rOperatio"
+  "\0162\031.PlayerOperation.CardType\">\n\rOperatio"
   "nType\022\014\n\010Compound\020\000\022\014\n\010Transfer\020\001\022\007\n\003Use"
-  "\020\002\"T\n\010CardType\022\t\n\005Water\020\000\022\010\n\004Fire\020\001\022\t\n\005L"
-  "ight\020\002\022\n\n\006Candle\020\003\022\010\n\004Wood\020\004\022\007\n\003Fog\020\005\022\t\n"
-  "\005Witch\020\006\"\241\001\n\010RoomInfo\022\016\n\006roomID\030\001 \001(\005\022\014\n"
-  "\004time\030\002 \001(\005\022\021\n\tplayerNum\030\003 \001(\005\022\021\n\tcandle"
-  "Num\030\004 \001(\005\022\017\n\007woodNum\030\005 \001(\005\022\016\n\006fogNum\030\006 \001"
-  "(\005\022\020\n\010witchNum\030\007 \001(\005\022\036\n\026currOperationPla"
-  "yerNum\030\010 \001(\005\"\312\001\n\017OtherPlayerInfo\022\014\n\004name"
-  "\030\001 \001(\t\022\r\n\005score\030\002 \001(\005\022\017\n\007seatNum\030\003 \001(\005\022\017"
-  "\n\007cardNum\030\004 \001(\005\022\020\n\010witchNum\030\005 \001(\005\0227\n\020Cur"
-  "rPlayerStatus\030\006 \001(\0162\035.OtherPlayerInfo.Pl"
-  "ayerStatus\"-\n\014PlayerStatus\022\n\n\006Normal\020\000\022\010"
-  "\n\004Wood\020\001\022\007\n\003Fog\020\002\"\226\002\n\017LocalPlayerInfo\022\017\n"
-  "\007cardNum\030\001 \001(\005\022\020\n\010waterNum\030\002 \001(\005\022\017\n\007fire"
-  "Num\030\003 \001(\005\022\020\n\010lightNum\030\004 \001(\005\022\021\n\tcandleNum"
-  "\030\005 \001(\005\022\017\n\007woodNum\030\006 \001(\005\022\016\n\006fogNum\030\007 \001(\005\022"
-  "\020\n\010witchNum\030\010 \001(\005\0227\n\020CurrPlayerStatus\030\t "
-  "\001(\0162\035.LocalPlayerInfo.PlayerStatus\022\017\n\007se"
-  "atNum\030\n \001(\005\"-\n\014PlayerStatus\022\n\n\006Normal\020\000\022"
-  "\010\n\004Wood\020\001\022\007\n\003Fog\020\002\"\253\001\n\nGameFinish\022\017\n\007sea"
-  "tNum\030\001 \001(\005\022\020\n\010waterNum\030\002 \001(\005\022\017\n\007fireNum\030"
-  "\003 \001(\005\022\020\n\010lightNum\030\004 \001(\005\022\021\n\tcandleNum\030\005 \001"
-  "(\005\022\017\n\007woodNum\030\006 \001(\005\022\016\n\006fogNum\030\007 \001(\005\022\020\n\010w"
-  "itchNum\030\010 \001(\005\022\021\n\tgameScore\030\t \001(\005\"}\n\022Cand"
-  "leCardFeedback\022\020\n\010waterNum\030\001 \001(\005\022\017\n\007fire"
-  "Num\030\002 \001(\005\022\020\n\010lightNum\030\003 \001(\005\022\021\n\tcandleNum"
-  "\030\004 \001(\005\022\017\n\007woodNum\030\005 \001(\005\022\016\n\006fogNum\030\006 \001(\005b"
-  "\006proto3"
+  "\020\002\022\010\n\004Skip\020\003\"T\n\010CardType\022\t\n\005Water\020\000\022\010\n\004F"
+  "ire\020\001\022\t\n\005Light\020\002\022\n\n\006Candle\020\003\022\010\n\004Wood\020\004\022\007"
+  "\n\003Fog\020\005\022\t\n\005Witch\020\006\"\241\001\n\010RoomInfo\022\016\n\006roomI"
+  "D\030\001 \001(\005\022\014\n\004time\030\002 \001(\005\022\021\n\tplayerNum\030\003 \001(\005"
+  "\022\021\n\tcandleNum\030\004 \001(\005\022\017\n\007woodNum\030\005 \001(\005\022\016\n\006"
+  "fogNum\030\006 \001(\005\022\020\n\010witchNum\030\007 \001(\005\022\036\n\026currOp"
+  "erationPlayerNum\030\010 \001(\005\"\312\001\n\017OtherPlayerIn"
+  "fo\022\014\n\004name\030\001 \001(\t\022\r\n\005score\030\002 \001(\005\022\017\n\007seatN"
+  "um\030\003 \001(\005\022\017\n\007cardNum\030\004 \001(\005\022\020\n\010witchNum\030\005 "
+  "\001(\005\0227\n\020CurrPlayerStatus\030\006 \001(\0162\035.OtherPla"
+  "yerInfo.PlayerStatus\"-\n\014PlayerStatus\022\n\n\006"
+  "Normal\020\000\022\010\n\004Wood\020\001\022\007\n\003Fog\020\002\"\226\002\n\017LocalPla"
+  "yerInfo\022\017\n\007cardNum\030\001 \001(\005\022\020\n\010waterNum\030\002 \001"
+  "(\005\022\017\n\007fireNum\030\003 \001(\005\022\020\n\010lightNum\030\004 \001(\005\022\021\n"
+  "\tcandleNum\030\005 \001(\005\022\017\n\007woodNum\030\006 \001(\005\022\016\n\006fog"
+  "Num\030\007 \001(\005\022\020\n\010witchNum\030\010 \001(\005\0227\n\020CurrPlaye"
+  "rStatus\030\t \001(\0162\035.LocalPlayerInfo.PlayerSt"
+  "atus\022\017\n\007seatNum\030\n \001(\005\"-\n\014PlayerStatus\022\n\n"
+  "\006Normal\020\000\022\010\n\004Wood\020\001\022\007\n\003Fog\020\002\"\253\001\n\nGameFin"
+  "ish\022\017\n\007seatNum\030\001 \001(\005\022\020\n\010waterNum\030\002 \001(\005\022\017"
+  "\n\007fireNum\030\003 \001(\005\022\020\n\010lightNum\030\004 \001(\005\022\021\n\tcan"
+  "dleNum\030\005 \001(\005\022\017\n\007woodNum\030\006 \001(\005\022\016\n\006fogNum\030"
+  "\007 \001(\005\022\020\n\010witchNum\030\010 \001(\005\022\021\n\tgameScore\030\t \001"
+  "(\005\"\216\001\n\022CandleCardFeedback\022\020\n\010waterNum\030\001 "
+  "\001(\005\022\017\n\007fireNum\030\002 \001(\005\022\020\n\010lightNum\030\003 \001(\005\022\021"
+  "\n\tcandleNum\030\004 \001(\005\022\017\n\007woodNum\030\005 \001(\005\022\016\n\006fo"
+  "gNum\030\006 \001(\005\022\017\n\007seatNum\030\007 \001(\005\"\"\n\017OffLineOr"
+  "OnLine\022\017\n\007seatNum\030\001 \001(\005b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_GameContent_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_GameContent_2eproto_sccs[6] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_GameContent_2eproto_sccs[7] = {
   &scc_info_CandleCardFeedback_GameContent_2eproto.base,
   &scc_info_GameFinish_GameContent_2eproto.base,
   &scc_info_LocalPlayerInfo_GameContent_2eproto.base,
+  &scc_info_OffLineOrOnLine_GameContent_2eproto.base,
   &scc_info_OtherPlayerInfo_GameContent_2eproto.base,
   &scc_info_PlayerOperation_GameContent_2eproto.base,
   &scc_info_RoomInfo_GameContent_2eproto.base,
@@ -265,10 +294,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Gam
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_GameContent_2eproto_once;
 static bool descriptor_table_GameContent_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_GameContent_2eproto = {
-  &descriptor_table_GameContent_2eproto_initialized, descriptor_table_protodef_GameContent_2eproto, "GameContent.proto", 1247,
-  &descriptor_table_GameContent_2eproto_once, descriptor_table_GameContent_2eproto_sccs, descriptor_table_GameContent_2eproto_deps, 6, 0,
+  &descriptor_table_GameContent_2eproto_initialized, descriptor_table_protodef_GameContent_2eproto, "GameContent.proto", 1311,
+  &descriptor_table_GameContent_2eproto_once, descriptor_table_GameContent_2eproto_sccs, descriptor_table_GameContent_2eproto_deps, 7, 0,
   schemas, file_default_instances, TableStruct_GameContent_2eproto::offsets,
-  file_level_metadata_GameContent_2eproto, 6, file_level_enum_descriptors_GameContent_2eproto, file_level_service_descriptors_GameContent_2eproto,
+  file_level_metadata_GameContent_2eproto, 7, file_level_enum_descriptors_GameContent_2eproto, file_level_service_descriptors_GameContent_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -282,6 +311,7 @@ bool PlayerOperation_OperationType_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+    case 3:
       return true;
     default:
       return false;
@@ -292,6 +322,7 @@ bool PlayerOperation_OperationType_IsValid(int value) {
 constexpr PlayerOperation_OperationType PlayerOperation::Compound;
 constexpr PlayerOperation_OperationType PlayerOperation::Transfer;
 constexpr PlayerOperation_OperationType PlayerOperation::Use;
+constexpr PlayerOperation_OperationType PlayerOperation::Skip;
 constexpr PlayerOperation_OperationType PlayerOperation::OperationType_MIN;
 constexpr PlayerOperation_OperationType PlayerOperation::OperationType_MAX;
 constexpr int PlayerOperation::OperationType_ARRAYSIZE;
@@ -2116,15 +2147,15 @@ CandleCardFeedback::CandleCardFeedback(const CandleCardFeedback& from)
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&waternum_, &from.waternum_,
-    static_cast<size_t>(reinterpret_cast<char*>(&fognum_) -
-    reinterpret_cast<char*>(&waternum_)) + sizeof(fognum_));
+    static_cast<size_t>(reinterpret_cast<char*>(&seatnum_) -
+    reinterpret_cast<char*>(&waternum_)) + sizeof(seatnum_));
   // @@protoc_insertion_point(copy_constructor:CandleCardFeedback)
 }
 
 void CandleCardFeedback::SharedCtor() {
   ::memset(&waternum_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&fognum_) -
-      reinterpret_cast<char*>(&waternum_)) + sizeof(fognum_));
+      reinterpret_cast<char*>(&seatnum_) -
+      reinterpret_cast<char*>(&waternum_)) + sizeof(seatnum_));
 }
 
 CandleCardFeedback::~CandleCardFeedback() {
@@ -2151,8 +2182,8 @@ void CandleCardFeedback::Clear() {
   (void) cached_has_bits;
 
   ::memset(&waternum_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&fognum_) -
-      reinterpret_cast<char*>(&waternum_)) + sizeof(fognum_));
+      reinterpret_cast<char*>(&seatnum_) -
+      reinterpret_cast<char*>(&waternum_)) + sizeof(seatnum_));
   _internal_metadata_.Clear();
 }
 
@@ -2202,6 +2233,13 @@ const char* CandleCardFeedback::_InternalParse(const char* ptr, ::PROTOBUF_NAMES
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
           fognum_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 seatNum = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
+          seatnum_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -2267,6 +2305,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(6, this->_internal_fognum(), target);
   }
 
+  // int32 seatNum = 7;
+  if (this->seatnum() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(7, this->_internal_seatnum(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
@@ -2325,6 +2369,13 @@ size_t CandleCardFeedback::ByteSizeLong() const {
         this->_internal_fognum());
   }
 
+  // int32 seatNum = 7;
+  if (this->seatnum() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_seatnum());
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -2374,6 +2425,9 @@ void CandleCardFeedback::MergeFrom(const CandleCardFeedback& from) {
   if (from.fognum() != 0) {
     _internal_set_fognum(from._internal_fognum());
   }
+  if (from.seatnum() != 0) {
+    _internal_set_seatnum(from._internal_seatnum());
+  }
 }
 
 void CandleCardFeedback::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -2403,9 +2457,196 @@ void CandleCardFeedback::InternalSwap(CandleCardFeedback* other) {
   swap(candlenum_, other->candlenum_);
   swap(woodnum_, other->woodnum_);
   swap(fognum_, other->fognum_);
+  swap(seatnum_, other->seatnum_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CandleCardFeedback::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void OffLineOrOnLine::InitAsDefaultInstance() {
+}
+class OffLineOrOnLine::_Internal {
+ public:
+};
+
+OffLineOrOnLine::OffLineOrOnLine()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:OffLineOrOnLine)
+}
+OffLineOrOnLine::OffLineOrOnLine(const OffLineOrOnLine& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  seatnum_ = from.seatnum_;
+  // @@protoc_insertion_point(copy_constructor:OffLineOrOnLine)
+}
+
+void OffLineOrOnLine::SharedCtor() {
+  seatnum_ = 0;
+}
+
+OffLineOrOnLine::~OffLineOrOnLine() {
+  // @@protoc_insertion_point(destructor:OffLineOrOnLine)
+  SharedDtor();
+}
+
+void OffLineOrOnLine::SharedDtor() {
+}
+
+void OffLineOrOnLine::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const OffLineOrOnLine& OffLineOrOnLine::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_OffLineOrOnLine_GameContent_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void OffLineOrOnLine::Clear() {
+// @@protoc_insertion_point(message_clear_start:OffLineOrOnLine)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  seatnum_ = 0;
+  _internal_metadata_.Clear();
+}
+
+const char* OffLineOrOnLine::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // int32 seatNum = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          seatnum_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* OffLineOrOnLine::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:OffLineOrOnLine)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 seatNum = 1;
+  if (this->seatnum() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_seatnum(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:OffLineOrOnLine)
+  return target;
+}
+
+size_t OffLineOrOnLine::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:OffLineOrOnLine)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 seatNum = 1;
+  if (this->seatnum() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_seatnum());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void OffLineOrOnLine::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:OffLineOrOnLine)
+  GOOGLE_DCHECK_NE(&from, this);
+  const OffLineOrOnLine* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<OffLineOrOnLine>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:OffLineOrOnLine)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:OffLineOrOnLine)
+    MergeFrom(*source);
+  }
+}
+
+void OffLineOrOnLine::MergeFrom(const OffLineOrOnLine& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:OffLineOrOnLine)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.seatnum() != 0) {
+    _internal_set_seatnum(from._internal_seatnum());
+  }
+}
+
+void OffLineOrOnLine::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:OffLineOrOnLine)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void OffLineOrOnLine::CopyFrom(const OffLineOrOnLine& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:OffLineOrOnLine)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool OffLineOrOnLine::IsInitialized() const {
+  return true;
+}
+
+void OffLineOrOnLine::InternalSwap(OffLineOrOnLine* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(seatnum_, other->seatnum_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata OffLineOrOnLine::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -2429,6 +2670,9 @@ template<> PROTOBUF_NOINLINE ::GameFinish* Arena::CreateMaybeMessage< ::GameFini
 }
 template<> PROTOBUF_NOINLINE ::CandleCardFeedback* Arena::CreateMaybeMessage< ::CandleCardFeedback >(Arena* arena) {
   return Arena::CreateInternal< ::CandleCardFeedback >(arena);
+}
+template<> PROTOBUF_NOINLINE ::OffLineOrOnLine* Arena::CreateMaybeMessage< ::OffLineOrOnLine >(Arena* arena) {
+  return Arena::CreateInternal< ::OffLineOrOnLine >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

@@ -45,12 +45,19 @@ public:
 
     int getStatus() { return status; }
 
+    int getUserId() { return user_id; }
+
+    void clearGameRoom() { game_room = nullptr; }
+
 private:
     std::vector<std::shared_ptr<GameSession>> & client_info;
     std::list<std::shared_ptr<MatchClientNode>> & match_queue_3;
     std::vector<std::shared_ptr<GameRoom>> & room_container;
 
     std::shared_ptr<GameRoom> game_room;
+
+    int status;         // 用户状态
+    int user_id;        // 用户ID
 
     void center_handler(std::string buffer) override ;
 
@@ -65,16 +72,9 @@ private:
     // 经过此函数后就不再通过do_read函数捕获消息，并且切换状态为InTheGame
     void AcceptOrRefuseHandler(std::string buffer);
 
-    void StartGame();
-
-    void game_read();
-
-    void game_handler(std::string buffer);
+    void GameFinishHandler(std::string buffer);
 
     void quit_handler() override;
-
-    int status;         // 用户状态
-    int user_id;        // 用户ID
 };
 
 #endif //THE_MOUNTAINS_SERVER_GAMESESSION_H
