@@ -6,17 +6,17 @@
 #define THE_MOUNTAINS_SERVER_GAMESESSION_H
 
 #include "../MsgProtocol/Game.pb.h"
+#include "../MsgProtocol/GameContent.pb.h"
 #include "../Services/AsyncServices/AsyncSession.h"
 #include "../Services/DBServices/DatabaseService.h"
 #include <list>
 
 class GameSession;
+class GameRoom;
 
 struct MatchClientNode{
     std::shared_ptr<GameSession> client;
 };
-
-struct GameRoom;
 
 class GameSession : public AsyncSession{
 public:
