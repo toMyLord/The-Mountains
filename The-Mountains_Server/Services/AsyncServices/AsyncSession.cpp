@@ -11,7 +11,10 @@ AsyncSession::AsyncSession(tcp::socket socket): socket_(std::move(socket)) {
 }
 
 void AsyncSession::SendMessages(const std::string & buffer) {
-    boost::asio::write(socket_, boost::asio::buffer(buffer.c_str(), buffer.size()));
+    std::string temp;
+    temp += char(buffer.size());
+    temp += buffer;
+    boost::asio::write(socket_, boost::asio::buffer(temp.c_str(), temp.size()));
 }
 
 void AsyncSession::SendHeartBeats() {
