@@ -351,6 +351,27 @@ bool GameRoom::isOffLine(const std::shared_ptr<AsyncSession> & offline_player) {
             std::string sendMsg = code + temp;
             sendMsgToAll(sendMsg);
 
+            auto last_operation = operation_queue.end();
+            last_operation--;
+
+            PlayerOperation last_op;
+            last_op.ParseFromArray(last_operation->c_str(), last_operation->size());
+
+            int last_seat = last_op.seatnum();
+            if(last_seat % player_number == i) {
+                PlayerOperation skip;
+                skip.set_seatnum(i + 1);
+                skip.set_operation(PlayerOperation::Skip);
+                skip.set_card(PlayerOperation::Water);
+
+                std::string temp;
+                skip.SerializeToString(&temp);
+                temp = char(sendMsgToClient::PlayerOperationCode_) + temp;
+
+                sendMsgToAll(temp);
+            }
+
+
             return true;
         }
     }
