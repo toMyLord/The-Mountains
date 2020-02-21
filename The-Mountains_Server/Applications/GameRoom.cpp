@@ -49,7 +49,7 @@ void GameRoom::InitRoom() {
     room.candleNum = 3;
     room.woodNum = 3;
     room.fogNum = 3;
-    room.witchNum = 3;
+    room.witchNum = 6;
     time(&room.start_time);
 }
 
@@ -248,11 +248,6 @@ void GameRoom::SendReconnectionInfo(const std::shared_ptr<AsyncSession> & game_p
     sendMsg += temp;
 
     game_player->SendMessagesWithoutLength(sendMsg);
-
-    std::string log_buffer;
-    log_buffer = '[' + TimeServices::getTime() + "  Reconnection Setup]:\tUser<" + char(seat_num)
-            + "> reconnected in Room<" + std::to_string(room_id) + ">!";
-    LogServices::getInstance()->RecordingBoth(log_buffer, true);
 }
 
 

@@ -216,6 +216,10 @@ void GameSession::ReconnectionProcessedHandler() {
     offline_list.erase(it);
 
     this->game_room->ChangeStatusToNormal(shared_from_this());
+    std::string log_buffer;
+    log_buffer = '[' + TimeServices::getTime() + "  Reconnection Setup]:\tUser<" + std::to_string(user_id)
+                 + "> reconnected in Room<" + std::to_string(game_room->getRoomID()) + ">!";
+    LogServices::getInstance()->RecordingBoth(log_buffer, true);
 }
 
 void GameSession::quit_handler() {
