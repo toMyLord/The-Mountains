@@ -141,9 +141,9 @@ void GameRoom::start() {
 
     InitRoom();
 
-    sendMsgToAll(getRoomInfo());
-
     InitPlayer();
+
+    sendMsgToAll(getRoomInfo());
 }
 
 std::string GameRoom::getPlayerInfo(const std::shared_ptr<AsyncSession> & game_player) {
