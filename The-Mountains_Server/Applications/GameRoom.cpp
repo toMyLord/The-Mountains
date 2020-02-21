@@ -56,6 +56,7 @@ void GameRoom::InitRoom() {
 std::string GameRoom::getRoomInfo() {
     RoomInfo room_if;
     time_t now;
+    time(&now);
     room_if.set_roomid(room.roomID);
     room_if.set_time(int(difftime(now, room.start_time)));
     room_if.set_playernum(room.playerNum);
