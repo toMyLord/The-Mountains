@@ -47,8 +47,6 @@ void GameSession::center_handler(std::string buffer) {
 }
 
 void GameSession::UserInfoToGameServerHandler(std::string buffer) {
-    status = clientStatus::BeforeMatch;     //确定状态为进入匹配前的状态
-
     UserInfoToGameServer user_info;
     user_info.ParseFromArray(buffer.c_str(), buffer.size());
 
@@ -58,7 +56,7 @@ void GameSession::UserInfoToGameServerHandler(std::string buffer) {
             [user_info](const OffLinePlayer & compare) {
         return compare.user_id == user_info.userid();
     });
-    if(it == offline_list.end()) {
+    if(it != offline_list.end()) {
         // 新连接的用户是掉线用户。
         auto room = std::find_if(room_container.begin(), room_container.end(),
                 [it](const std::shared_ptr<GameRoom> & compare) {
@@ -76,6 +74,9 @@ void GameSession::UserInfoToGameServerHandler(std::string buffer) {
         this->game_room->setOfflinePlayer(it->user_id, *client);
 
         SendMessages(this->game_room->getRoomInfo());
+    }
+    else {
+        status = clientStatus::BeforeMatch;     //确定状态为进入匹配前的状态
     }
 }
 
