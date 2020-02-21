@@ -350,8 +350,7 @@ bool GameRoom::isOffLine(const std::shared_ptr<AsyncSession> & offline_player) {
             offline.set_seatnum(i);
             std::string temp;
             offline.SerializeToString(&temp);
-            std::string sendMsg = std::to_string(sendMsgToClient::OfflineCode) + temp;
-            sendMsg[0] = sendMsg[0] - '0';
+            std::string sendMsg = char(sendMsgToClient::OfflineCode) + temp;
             sendMsgToAll(sendMsg);
 
             return true;
