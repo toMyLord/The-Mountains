@@ -192,6 +192,8 @@ void GameSession::GameFinishHandler(std::string buffer) {
             [room_id](const std::shared_ptr<GameRoom> & compare){ return compare->getRoomID() == room_id; });
     room_container.erase(it);
 
+    status = clientStatus::BeforeMatch;
+
     std::string log_buffer;
     log_buffer = '[' + TimeServices::getTime() + "  Game Over]:\tGame over, room<" +
             std::to_string(room_id) + "> is destroyed!";
@@ -239,9 +241,15 @@ void GameSession::quit_handler() {
             OffLinePlayer off_player;
             off_player.user_id = user_id;
             off_player.room_id = this->game_room->getRoomID();
+            offline_list.push_back(off_player);
             this->game_room = nullptr;
 
             // game_room 是有掉线用户的room的迭代器
+            std::string log_buffer;
+            log_buffer = '[' + TimeServices::getTime() + "  Player Dropped]:\tUser<" + char(user_id)
+                         + "> is offline in Room<" + std::to_string(off_player.room_id) +
+                         ">! Offline Player number is " + char(offline_list.size()) + ".";
+            LogServices::getInstance()->RecordingBoth(log_buffer, false);
         }
     }
     std::string log_buffer;
