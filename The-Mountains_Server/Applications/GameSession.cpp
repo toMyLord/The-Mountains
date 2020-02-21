@@ -33,8 +33,6 @@ void GameSession::center_handler(std::string buffer) {
             this->game_room->CandleCardFeedbackHandler(buffer); break;
         case GameRoom::recvMsgFromClient::GameFinishCode:
             GameFinishHandler(buffer.substr(1)); break;
-        case GameRoom::recvMsgFromClient ::ReconnectionConfirmCode:
-            this->game_room->SendReconnectionInfo(shared_from_this()); break;
         case GameRoom::recvMsgFromClient::ReconnectionProcessedCode:
             ReconnectionProcessedHandler(); break;
         default: {

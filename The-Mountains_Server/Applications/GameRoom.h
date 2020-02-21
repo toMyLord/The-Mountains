@@ -19,8 +19,7 @@ public:
         PlayerOperationCode = 7,            // 玩家操作包
         CandleCardFeedbackCode = 8,         // 烛牌反馈包
         GameFinishCode = 9,                 // 游戏结束包
-        ReconnectionConfirmCode = 10,       // 重连确认包，接受到此包后准备发送操作队列
-        ReconnectionProcessedCode = 11      // 重连队列处理完毕
+        ReconnectionProcessedCode = 10      // 重连队列处理完毕
     };
 
     enum sendMsgToClient {
