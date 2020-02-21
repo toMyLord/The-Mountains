@@ -246,9 +246,9 @@ void GameSession::quit_handler() {
 
             // game_room 是有掉线用户的room的迭代器
             std::string log_buffer;
-            log_buffer = '[' + TimeServices::getTime() + "  Player Dropped]:\tUser<" + std::to_string(user_id)
+            log_buffer = '[' + TimeServices::getTime() + "  Player Dropped]:\tUser<" + std::to_string(off_player.user_id)
                          + "> is offline in Room<" + std::to_string(off_player.room_id) +
-                         ">! Offline Player number is " + std::to_string(offline_list.size()) + ".";
+                         ">! Offline player number is " + std::to_string(offline_list.size()) + ".";
             LogServices::getInstance()->RecordingBoth(log_buffer, false);
         }
     }
