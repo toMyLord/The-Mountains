@@ -79,6 +79,8 @@ private:
     // 经过此函数后就不再通过do_read函数捕获消息，并且切换状态为InTheGame
     void AcceptOrRefuseHandler(std::string buffer);
 
+    void RoomInfoArrivedHandler();
+
     void GameFinishHandler(std::string buffer);
 
     void ReconnectionProcessedHandler();

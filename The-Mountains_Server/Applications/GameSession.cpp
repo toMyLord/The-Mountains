@@ -26,7 +26,7 @@ void GameSession::center_handler(std::string buffer) {
         case recvMsgFromClient::AcceptOrRefuseCode:
             AcceptOrRefuseHandler(buffer.substr(1)); break;
         case GameRoom::recvMsgFromClient::RoomInfoArrivedCode:
-            this->game_room->SendPlayerInfo(shared_from_this()); break;
+            RoomInfoArrivedHandler(); break;
         case GameRoom::recvMsgFromClient::PlayerOperationCode:
             this->game_room->PlayerOperationHandler(buffer, shared_from_this()); break;
         case GameRoom::recvMsgFromClient::CandleCardFeedbackCode:
@@ -170,6 +170,13 @@ void GameSession::AcceptOrRefuseHandler(std::string buffer) {
     this->game_room = *it;
 
     status = InTheGame;
+}
+
+void GameSession::RoomInfoArrivedHandler() {
+    if (status != clientStatus::Reconnection)
+        this->game_room->SendPlayerInfo(shared_from_this());
+    else
+        this->game_room->SendReconnectionInfo(shared_from_this());
 }
 
 void GameSession::GameFinishHandler(std::string buffer) {
