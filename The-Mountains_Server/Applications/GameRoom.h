@@ -6,7 +6,6 @@
 #define THE_MOUNTAINS_SERVER_GAMEROOM_H
 
 #include "GameSession.h"
-#include <queue>
 
 class GameRoom {
 public:
@@ -20,7 +19,8 @@ public:
         PlayerOperationCode = 7,            // 玩家操作包
         CandleCardFeedbackCode = 8,         // 烛牌反馈包
         GameFinishCode = 9,                 // 游戏结束包
-        ReconnectionConfirmCode = 10        // 重连确认包，接受到此包后准备发送操作队列
+        ReconnectionConfirmCode = 10,       // 重连确认包，接受到此包后准备发送操作队列
+        ReconnectionProcessedCode = 11      // 重连队列处理完毕
     };
 
     enum sendMsgToClient {
@@ -31,12 +31,15 @@ public:
         CandleCardFeedbackCode_ = 9,        // 烛牌反馈包，包含下家的手牌信息
         PlayerOperationCode_ = 10,          // 广播玩家操作包，内容为 recvMsg 的7
         OfflineCode = 11,                   // 掉线
-        ReconnectionCode = 12               // 重连，玩家信息全都收到发送
+        ReconnectionCode = 12,              // 重连，玩家信息全都收到发送
+        EndOfReconnectQueueCode = 13        // 重连队列结尾
     };
 
     GameRoom(int player_num = 3, int room_num = 0, std::shared_ptr<GameSession> player1 = nullptr,
              std::shared_ptr<GameSession> player2 = nullptr, std::shared_ptr<GameSession> player3 = nullptr,
              std::shared_ptr<GameSession> player4 = nullptr, std::shared_ptr<GameSession> player5 = nullptr);
+
+    void setOfflinePlayer(const int offline_id, const std::shared_ptr<GameSession> & offline_player);
 
     void start();
 
@@ -44,17 +47,27 @@ public:
 
     bool isInThisRoom(const std::shared_ptr<AsyncSession> & compare_player);
 
-    void PlayerOperationHandler(std::string buffer);
+    void PlayerOperationHandler(std::string buffer, const std::shared_ptr<AsyncSession> & game_player);
 
     void CandleCardFeedbackHandler(std::string buffer);
 
-    int GameFinishHandler(const std::string & buffer);
+    int GameFinishHandler(const std::string & buffer, std::vector<int> & seat_num);
 
     bool isOffLine(const std::shared_ptr<AsyncSession> & offline_player);
 
+    std::string getPlayerInfo(const std::shared_ptr<AsyncSession> & game_player);
+
     void SendPlayerInfo(const std::shared_ptr<AsyncSession> & game_player);
 
+    void SendReconnectionInfo(const std::shared_ptr<AsyncSession> & game_player);
+
     int getRoomID() { return room_id; }
+
+    int getPlayerNumber() { return player_number; }
+
+    void ChangeStatusToNormal(const std::shared_ptr<AsyncSession> & game_player);
+
+    std::string getRoomInfo();
 
 private:
     struct RoomInformation {
@@ -98,7 +111,8 @@ private:
     RoomInformation room;
     PlayerInformation player_info[5];
     bool isCardPoolReady;
-    std::queue<std::string> operation_queue;
+    std::vector<std::string> operation_queue;
+    int room_status;
 
     void WaitingForReady();
 

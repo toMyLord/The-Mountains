@@ -9,11 +9,21 @@ GameRoom::GameRoom(int player_num, int room_num, std::shared_ptr<GameSession> pl
                    std::shared_ptr<GameSession> player4, std::shared_ptr<GameSession> player5):
             player_number(player_num), room_id(room_num), player{player1, player2, player3, player4, player5} {
     isCardPoolReady = false;
+    room_status = PlayerStatus::normal;
 }
 
 void GameRoom::sendMsgToAll(const std::string & buffer) {
     for(int i = 0; i < player_number; i++) {
-        player[i]->SendMessages(buffer);
+        if(player_info[i].status == PlayerStatus::normal)
+            player[i]->SendMessages(buffer);
+    }
+}
+
+
+void GameRoom::setOfflinePlayer(const int offline_id, const std::shared_ptr<GameSession> & offline_player) {
+    for(int i = 0; i < player_number; i++) {
+        if(player_info[i].id == offline_id)
+            player[i] = offline_player;
     }
 }
 
@@ -41,6 +51,25 @@ void GameRoom::InitRoom() {
     room.fogNum = 3;
     room.witchNum = 3;
     time(&room.start_time);
+}
+
+std::string GameRoom::getRoomInfo() {
+    RoomInfo room_if;
+    room_if.set_roomid(room.roomID);
+    room_if.set_time(0);
+    room_if.set_playernum(room.playerNum);
+    room_if.set_candlenum(room.candleNum);
+    room_if.set_woodnum(room.woodNum);
+    room_if.set_fognum(room.fogNum);
+    room_if.set_witchnum(room.witchNum);
+
+    std::string temp;
+    room_if.SerializeToString(&temp);
+
+    std::string sendMsg = std::to_string(sendMsgToClient::RoomInfoCode) + temp;
+    sendMsg[0] = sendMsg[0] - '0';
+
+    return sendMsg;
 }
 
 void GameRoom::InitPlayer() {
@@ -112,31 +141,13 @@ void GameRoom::start() {
 
     InitRoom();
 
-    RoomInfo room_if;
-    room_if.set_roomid(room.roomID);
-    room_if.set_time(0);
-    room_if.set_playernum(room.playerNum);
-    room_if.set_candlenum(room.candleNum);
-    room_if.set_woodnum(room.woodNum);
-    room_if.set_fognum(room.fogNum);
-    room_if.set_witchnum(room.witchNum);
-
-    std::string temp;
-    room_if.SerializeToString(&temp);
-
-    std::string sendMsg = std::to_string(sendMsgToClient::RoomInfoCode) + temp;
-    sendMsg[0] = sendMsg[0] - '0';
-    sendMsgToAll(sendMsg);
+    sendMsgToAll(getRoomInfo());
 
     InitPlayer();
 }
 
-void GameRoom::SendPlayerInfo(const std::shared_ptr<AsyncSession> & game_player) {
-    while(isCardPoolReady == false) {
-        // 等待服务器洗牌
-        usleep(100000);
-    }
-    // 服务器洗牌结束
+std::string GameRoom::getPlayerInfo(const std::shared_ptr<AsyncSession> & game_player) {
+    std::string player_if;
     for(int i = 0; i < player_number; i++) {
         if(player[i] == game_player) {
             // 本机玩家，发送本机玩家信息
@@ -155,9 +166,11 @@ void GameRoom::SendPlayerInfo(const std::shared_ptr<AsyncSession> & game_player)
             std::string temp;
             local_if.SerializeToString(&temp);
 
-            std::string sendMsg = std::to_string(sendMsgToClient::LocalPlayerInfoCode) + temp;
-            sendMsg[0] = sendMsg[0] - '0';
-            game_player->SendMessages(sendMsg);
+            temp = std::to_string(sendMsgToClient::LocalPlayerInfoCode) + temp;
+            temp[0] = temp[0] - '0';
+            temp = char(temp.size()) + temp;
+
+            player_if += temp;
         }
         else {
             // 房间玩家，发送房间玩家信息
@@ -172,29 +185,109 @@ void GameRoom::SendPlayerInfo(const std::shared_ptr<AsyncSession> & game_player)
             std::string temp;
             other_if.SerializeToString(&temp);
 
-            std::string sendMsg = std::to_string(sendMsgToClient::OtherPlayerInfoCode) + temp;
-            sendMsg[0] = sendMsg[0] - '0';
-            game_player->SendMessages(sendMsg);
+            temp = std::to_string(sendMsgToClient::OtherPlayerInfoCode) + temp;
+            temp[0] = temp[0] - '0';
+            temp = char(temp.size()) + temp;
+
+            player_if += temp;
         }
     }
+
+    return player_if;
+}
+
+void GameRoom::SendPlayerInfo(const std::shared_ptr<AsyncSession> & game_player) {
+    while(isCardPoolReady == false) {
+        // 等待服务器洗牌
+        usleep(100000);
+    }
+    // 服务器洗牌结束
+    game_player->SendMessagesWithoutLength(getPlayerInfo(game_player));
 
     std::string log_buffer;
     log_buffer = '[' + TimeServices::getTime() + "  Room Setup]:\t Room<" + std::to_string(room_id) + "> Setuped!";
     LogServices::getInstance()->RecordingBoth(log_buffer, true);
 }
 
-void GameRoom::PlayerOperationHandler(std::string buffer) {
-    operation_queue.push(buffer.substr(1));
-    buffer[0] = sendMsgToClient::PlayerOperationCode_ - '0';
+void GameRoom::SendReconnectionInfo(const std::shared_ptr<AsyncSession> & game_player) {
+    std::string sendMsg = getPlayerInfo(game_player);
+
+    int seat_num;
+    for(int i = 0; i < player_number; i++) {
+        if(player[i] == game_player)
+            seat_num = i;
+    }
+
+    // 添加协议12
+    OffLineOrOnLine online;
+    online.set_seatnum(seat_num);
+    std::string temp;
+    online.SerializeToString(&temp);
+    temp = char(sendMsgToClient::ReconnectionCode) + temp;
+    // 向其他玩家发送上线信息。
+    for(int i = 0; i < player_number; i++) {
+        if(player[i] != game_player)
+            player[i]->SendMessages(temp);
+    }
+    temp = char(temp.size()) + temp;
+
+    sendMsg += temp;
+
+    // 添加操作队列信息
+    for(auto queue : operation_queue) {
+        temp = char(sendMsgToClient::PlayerOperationCode_) + queue;
+        temp = char(temp.size()) + temp;
+        sendMsg += temp;
+    }
+
+    // 添加协议13
+    temp = char(sendMsgToClient::EndOfReconnectQueueCode);
+    temp = char(temp.size()) + temp;
+    sendMsg += temp;
+
+    game_player->SendMessagesWithoutLength(sendMsg);
+
+    std::string log_buffer;
+    log_buffer = '[' + TimeServices::getTime() + "  Reconnection Setup]:\tUser<" + char(seat_num)
+            + "> reconnected in Room<" + std::to_string(room_id) + ">!";
+    LogServices::getInstance()->RecordingBoth(log_buffer, true);
+}
+
+
+void GameRoom::PlayerOperationHandler(std::string buffer, const std::shared_ptr<AsyncSession> & game_player) {
+    operation_queue.push_back(buffer.substr(1));
+    buffer[0] = char(sendMsgToClient::PlayerOperationCode_);
     sendMsgToAll(buffer);
+
+    if(room_status == PlayerStatus::offline) {
+        int next_player;
+        for(int i = 0; i < player_number; i++) {
+            if(player[i] == game_player)
+                next_player = i + 1;
+        }
+        next_player = next_player % player_number;
+
+        if(player_info[next_player].status == PlayerStatus::offline) {
+            PlayerOperation po;
+            po.set_seatnum(next_player);
+            po.set_operation(PlayerOperation::Skip);
+            po.set_card(PlayerOperation::Water);
+
+            std::string sendMsg;
+            po.SerializeToString(&sendMsg);
+            sendMsg = char(sendMsgToClient::ReconnectionCode) + sendMsg;
+
+            sendMsgToAll(sendMsg);
+        }
+    }
 }
 
 void GameRoom::CandleCardFeedbackHandler(std::string buffer) {
-    buffer[0] = sendMsgToClient::CandleCardFeedbackCode_ - '0';
+    buffer[0] = char(sendMsgToClient::CandleCardFeedbackCode_);
     sendMsgToAll(buffer);
 }
 
-int GameRoom::GameFinishHandler(const std::string & buffer) {
+int GameRoom::GameFinishHandler(const std::string & buffer, std::vector<int> & seat_num) {
     GameFinish game_fh;
     game_fh.ParseFromArray(buffer.c_str(), buffer.size());
 
@@ -208,11 +301,35 @@ int GameRoom::GameFinishHandler(const std::string & buffer) {
     mysqlpp::Query query = conn->query(query_buffer.c_str());
     query.exec();
 
+    if(room_status == PlayerStatus::offline) {
+        // 如果有掉线玩家
+        for(int i = 0; i < player_number; i++) {
+            if(player_info[i].status == PlayerStatus::offline) {
+                // Session 里加内容，注销掉所有在等待重连队里的信息！
+                seat_num.push_back(player_info[i].seatNum);
+            }
+        }
+    }
+
     for(int i = 0; i < player_number; i++) {
         player[i]->clearGameRoom();
         player[i] = nullptr;
     }
+    return room_id;
 }
+
+void GameRoom::ChangeStatusToNormal(const std::shared_ptr<AsyncSession> & game_player) {
+    int num = 0;
+    for(int i = 0; i < player_number; i++) {
+        if(player[i] == game_player)
+            player_info[i].status = PlayerStatus::normal;
+        if(player_info[i].status == PlayerStatus::normal)
+            num++;
+    }
+    if(num == player_number)
+        room_status = PlayerStatus::normal;
+}
+
 
 bool GameRoom::isInThisRoom(const std::shared_ptr<AsyncSession> & compare_player) {
     for(int i = 0; i < player_number; i++) {
@@ -226,6 +343,16 @@ bool GameRoom::isOffLine(const std::shared_ptr<AsyncSession> & offline_player) {
     for(int i = 0; i < player_number; i++) {
         if(player[i] == offline_player) {
             player[i] = nullptr;
+            player_info[i].status = PlayerStatus::offline;
+            room_status = PlayerStatus::offline;
+
+            OffLineOrOnLine offline;
+            offline.set_seatnum(i);
+            std::string temp;
+            offline.SerializeToString(&temp);
+            std::string sendMsg = std::to_string(sendMsgToClient::OfflineCode) + temp;
+            sendMsg[0] = sendMsg[0] - '0';
+            sendMsgToAll(sendMsg);
 
             return true;
         }

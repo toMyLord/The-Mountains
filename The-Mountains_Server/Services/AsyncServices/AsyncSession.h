@@ -23,6 +23,8 @@ public:
 
     void SendMessages(const std::string & buffer);
 
+    void SendMessagesWithoutLength(const std::string & buffer);
+
     void SendHeartBeats();
 
     void RecvHeartBeats();

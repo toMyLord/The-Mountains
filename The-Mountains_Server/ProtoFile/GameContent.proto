@@ -33,7 +33,7 @@ message PlayerOperation	//协议7,玩家操作包
 
 //协议10，重连确认，准备接收服务器操作队列 ReconnectionConfirm
 
-
+//协议11，队列处理完毕
 
 //Server to Client
 message RoomInfo	//协议号5，房间信息
@@ -118,3 +118,5 @@ message OffLineOrOnLine
 {
     int32 seatNum = 1;
 }
+
+//协议13，重连队列结尾

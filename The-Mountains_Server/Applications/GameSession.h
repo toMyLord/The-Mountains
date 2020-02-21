@@ -18,12 +18,18 @@ struct MatchClientNode{
     std::shared_ptr<GameSession> client;
 };
 
+struct OffLinePlayer {
+    int user_id;
+    int room_id;
+};
+
 class GameSession : public AsyncSession{
 public:
     enum clientStatus {
         BeforeMatch,
         Matching,
-        InTheGame
+        InTheGame,
+        Reconnection
     };
 
     enum recvMsgFromClient {
@@ -41,7 +47,7 @@ public:
 
     GameSession(tcp::socket socket, std::vector<std::shared_ptr<GameSession>> & client,
                 std::list<std::shared_ptr<MatchClientNode>> & match_3,
-                std::vector<std::shared_ptr<GameRoom>> & room);
+                std::vector<std::shared_ptr<GameRoom>> & room, std::list<OffLinePlayer> & offline);
 
     int getStatus() { return status; }
 
@@ -53,6 +59,7 @@ private:
     std::vector<std::shared_ptr<GameSession>> & client_info;
     std::list<std::shared_ptr<MatchClientNode>> & match_queue_3;
     std::vector<std::shared_ptr<GameRoom>> & room_container;
+    std::list<OffLinePlayer> & offline_list;
 
     std::shared_ptr<GameRoom> game_room;
 
@@ -73,6 +80,8 @@ private:
     void AcceptOrRefuseHandler(std::string buffer);
 
     void GameFinishHandler(std::string buffer);
+
+    void ReconnectionProcessedHandler();
 
     void quit_handler() override;
 };

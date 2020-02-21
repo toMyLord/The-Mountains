@@ -16,6 +16,7 @@ public:
 private:
     std::list<std::shared_ptr<MatchClientNode>> match_queue_3;
     std::vector<std::shared_ptr<GameRoom>> room_container;
+    std::list<OffLinePlayer> offline_list;
 
     void accept_handler(tcp::socket socket) override;
 
@@ -38,7 +39,7 @@ void GameServer<Session>::accept_handler(tcp::socket socket) {
     LogServices::getInstance()->RecordingBoth(log_buffer, true);
 
     auto ptr = std::make_shared<Session>(std::move(socket), this->client_info, this->match_queue_3,
-            this->room_container);
+            this->room_container, this->offline_list);
     this->client_info.push_back(ptr);
 
     std::thread match_detect_t(&GameServer::MatchDetect_t, this);

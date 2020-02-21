@@ -17,6 +17,11 @@ void AsyncSession::SendMessages(const std::string & buffer) {
     boost::asio::write(socket_, boost::asio::buffer(temp.c_str(), temp.size()));
 }
 
+void AsyncSession::SendMessagesWithoutLength(const std::string & buffer) {
+    boost::asio::write(socket_, boost::asio::buffer(buffer.c_str(), buffer.size()));
+
+}
+
 void AsyncSession::SendHeartBeats() {
     time_t now;
     time(&now);
