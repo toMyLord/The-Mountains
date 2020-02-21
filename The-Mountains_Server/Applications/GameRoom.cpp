@@ -55,8 +55,9 @@ void GameRoom::InitRoom() {
 
 std::string GameRoom::getRoomInfo() {
     RoomInfo room_if;
+    time_t now;
     room_if.set_roomid(room.roomID);
-    room_if.set_time(0);
+    room_if.set_time(int(difftime(now, room.start_time)));
     room_if.set_playernum(room.playerNum);
     room_if.set_candlenum(room.candleNum);
     room_if.set_woodnum(room.woodNum);
@@ -215,7 +216,7 @@ void GameRoom::SendReconnectionInfo(const std::shared_ptr<AsyncSession> & game_p
     int seat_num;
     for(int i = 0; i < player_number; i++) {
         if(player[i] == game_player)
-            seat_num = i;
+            seat_num = i + 1;
     }
 
     // 添加协议12
@@ -347,7 +348,7 @@ bool GameRoom::isOffLine(const std::shared_ptr<AsyncSession> & offline_player) {
             room_status = PlayerStatus::offline;
 
             OffLineOrOnLine offline;
-            offline.set_seatnum(i);
+            offline.set_seatnum(i + 1);
             std::string temp;
             offline.SerializeToString(&temp);
             char code = sendMsgToClient::OfflineCode;
