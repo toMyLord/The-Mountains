@@ -366,6 +366,7 @@ bool GameRoom::isOffLine(const std::shared_ptr<AsyncSession> & offline_player) {
 
                 std::string temp;
                 skip.SerializeToString(&temp);
+                operation_queue.push_back(temp);
                 temp = char(sendMsgToClient::PlayerOperationCode_) + temp;
 
                 sendMsgToAll(temp);
