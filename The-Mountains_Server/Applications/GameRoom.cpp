@@ -83,14 +83,16 @@ void GameRoom::InitPlayer() {
     for (int i = 0; i < 3; i++) card_pool[k++] = cardType::candle;
     for (int i = 0; i < 3; i++) card_pool[k++] = cardType::wood;
     for (int i = 0; i < 3; i++) card_pool[k++] = cardType::fog;
-    for (int i = 0; i < 45 ; ++i)
-    {
-        srand((unsigned)time(NULL));
-        k=rand()%(i+1);
-        int temp = card_pool[i];
-        card_pool[i]=card_pool[k];
-        card_pool[k]=temp;
-    }
+    // 洗牌两次
+    for (int j = 0; j < 2; j++)
+        for (int i = 0; i < 45 ; ++i)
+        {
+            srand((unsigned)time(NULL));
+            k=rand()%(i+1);
+            int temp = card_pool[i];
+            card_pool[i]=card_pool[k];
+            card_pool[k]=temp;
+        }
 
     // 洗牌完成
     k = 0;
@@ -371,8 +373,6 @@ bool GameRoom::isOffLine(const std::shared_ptr<AsyncSession> & offline_player) {
 
                 sendMsgToAll(temp);
             }
-
-
             return true;
         }
     }
