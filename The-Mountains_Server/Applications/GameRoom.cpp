@@ -260,7 +260,7 @@ void GameRoom::PlayerOperationHandler(std::string buffer, const std::shared_ptr<
         int next_player;
         for(int i = 0; i < player_number; i++) {
             if(player[i] == game_player)
-                next_player = i + 1;
+                next_player = i + 1 + 1;
         }
         next_player = next_player % player_number;
 
