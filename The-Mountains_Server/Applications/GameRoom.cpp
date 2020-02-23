@@ -259,21 +259,19 @@ void GameRoom::PlayerOperationHandler(std::string buffer, const std::shared_ptr<
     sendMsgToAll(buffer);
 
     if(room_status == PlayerStatus::offline) {
-        int next_player;
-        for(int i = 0; i < player_number; i++) {
-            if(player[i] == game_player)
-                next_player = i + 1 + 1;
-        }
-        next_player = next_player % player_number;
+        PlayerOperation op;
+        op.ParseFromArray(buffer.substr(1).c_str(), buffer.size() - 1);
+        int next_player = (op.seatnum()) % player_number;
 
         if(player_info[next_player].status == PlayerStatus::offline) {
             PlayerOperation po;
-            po.set_seatnum(next_player);
+            po.set_seatnum(next_player + 1);
             po.set_operation(PlayerOperation::Skip);
             po.set_card(PlayerOperation::Water);
 
             std::string sendMsg;
             po.SerializeToString(&sendMsg);
+            operation_queue.push_back(sendMsg);
             sendMsg = char(sendMsgToClient::PlayerOperationCode_) + sendMsg;
 
             sendMsgToAll(sendMsg);
@@ -286,7 +284,7 @@ void GameRoom::CandleCardFeedbackHandler(std::string buffer) {
     sendMsgToAll(buffer);
 }
 
-int GameRoom::GameFinishHandler(const std::string & buffer, std::vector<int> & seat_num) {
+int GameRoom::GameFinishHandler(const std::string & buffer, std::vector<int> & offline_id) {
     GameFinish game_fh;
     game_fh.ParseFromArray(buffer.c_str(), buffer.size());
 
@@ -304,15 +302,18 @@ int GameRoom::GameFinishHandler(const std::string & buffer, std::vector<int> & s
         // 如果有掉线玩家
         for(int i = 0; i < player_number; i++) {
             if(player_info[i].status == PlayerStatus::offline) {
-                // Session 里加内容，注销掉所有在等待重连队里的信息！
-                seat_num.push_back(player_info[i].seatNum);
+                // Session注销掉所有在等待重连队里的信息！
+                offline_id.push_back(player_info[i].id);
             }
         }
     }
 
     for(int i = 0; i < player_number; i++) {
-        player[i]->clearGameRoom();
-        player[i] = nullptr;
+        if(player[i] != nullptr) {
+            player[i]->clearGameRoom();
+            player[i]->setStatus(GameSession::clientStatus::BeforeMatch);
+            player[i] = nullptr;
+        }
     }
     return room_id;
 }

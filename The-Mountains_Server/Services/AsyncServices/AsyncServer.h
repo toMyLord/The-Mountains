@@ -35,7 +35,8 @@ protected:
 
 template<typename Session>
 AsyncServer<Session>::AsyncServer(boost::asio::io_context &io_context, short port, bool is_beats)
-        : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)), is_heartbeats(is_beats), is_threaded(false) {
+        : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)),
+        client_info(), is_heartbeats(is_beats), is_threaded(false) {
     do_accept();
 }
 

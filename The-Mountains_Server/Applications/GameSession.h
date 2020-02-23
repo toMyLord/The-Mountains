@@ -51,6 +51,8 @@ public:
 
     int getStatus() { return status; }
 
+    int setStatus(int s) { this->status = s; }
+
     int getUserId() { return user_id; }
 
     void clearGameRoom() { game_room = nullptr; }

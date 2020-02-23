@@ -182,22 +182,22 @@ void GameSession::GameFinishHandler(std::string buffer) {
     temp[0] = temp[0] - '0';
     game_room->sendMsgToAll(temp);
 
-    std::vector<int> seat_num;
-    int room_id = game_room->GameFinishHandler(buffer, seat_num);
-    for(auto a : seat_num) {
+    std::vector<int> offline_id;
+    int room_id = game_room->GameFinishHandler(buffer, offline_id);
+    for(auto a : offline_id) {
         auto it = std::find_if(offline_list.begin(), offline_list.end(),
                 [a](const OffLinePlayer & compare) {
             return compare.user_id == a;
         });
-        offline_list.erase(it);
+        if(it != offline_list.end())
+            offline_list.erase(it);
     }
 
     // 注销房间
     auto it = find_if(room_container.begin(), room_container.end(),
             [room_id](const std::shared_ptr<GameRoom> & compare){ return compare->getRoomID() == room_id; });
-    room_container.erase(it);
-
-    status = clientStatus::BeforeMatch;
+    if (it != room_container.end())
+        room_container.erase(it);
 
     std::string log_buffer;
     log_buffer = '[' + TimeServices::getTime() + "  Game Over]:\tGame over, room<" +
