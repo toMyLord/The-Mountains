@@ -125,7 +125,8 @@ void GameSession::MatchSwitchApplicationHandler(std::string buffer) {
                 [this](const std::list<std::shared_ptr<MatchClientNode>>::value_type & compare) {
             return compare->client == shared_from_this(); });
 
-        match_queue_3.erase(it);
+        if(it != match_queue_3.end())
+            match_queue_3.erase(it);
 
         status = BeforeMatch;
 
@@ -213,7 +214,8 @@ void GameSession::ReconnectionProcessedHandler() {
             [id](const OffLinePlayer & compare){
         return compare.user_id == id;
     });
-    offline_list.erase(it);
+    if(it != offline_list.end())
+        offline_list.erase(it);
 
     this->game_room->ChangeStatusToNormal(shared_from_this());
     std::string log_buffer;
