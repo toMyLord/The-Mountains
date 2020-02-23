@@ -274,7 +274,7 @@ void GameRoom::PlayerOperationHandler(std::string buffer, const std::shared_ptr<
 
             std::string sendMsg;
             po.SerializeToString(&sendMsg);
-            sendMsg = char(sendMsgToClient::CandleCardFeedbackCode_) + sendMsg;
+            sendMsg = char(sendMsgToClient::PlayerOperationCode_) + sendMsg;
 
             sendMsgToAll(sendMsg);
         }
