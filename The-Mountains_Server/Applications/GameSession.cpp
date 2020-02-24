@@ -61,8 +61,10 @@ void GameSession::UserInfoToGameServerHandler(std::string buffer) {
             return compare->getRoomID() == it->room_id;
         });
 
-        this->game_room = *room;
-        this->status = clientStatus::Reconnection;
+        if(room != room_container.end()) {
+            this->game_room = *room;
+            this->status = clientStatus::Reconnection;
+        }
 
         auto self = shared_from_this();
         auto client = std::find_if(client_info.begin(), client_info.end(),
@@ -166,7 +168,9 @@ void GameSession::AcceptOrRefuseHandler(std::string buffer) {
     auto self = shared_from_this();
     auto it = std::find_if(room_container.rbegin(), room_container.rend(),
             [self](const std::shared_ptr<GameRoom> & compare){ return compare->isInThisRoom(self); });
-    this->game_room = *it;
+
+    if(it != room_container.rend())
+        this->game_room = *it;
 
     status = InTheGame;
 }

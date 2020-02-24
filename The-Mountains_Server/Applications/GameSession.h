@@ -26,10 +26,10 @@ struct OffLinePlayer {
 class GameSession : public AsyncSession{
 public:
     enum clientStatus {
-        BeforeMatch,
-        Matching,
-        InTheGame,
-        Reconnection
+        BeforeMatch = 1,
+        Matching = 2,
+        InTheGame = 3,
+        Reconnection = 4
     };
 
     enum recvMsgFromClient {
