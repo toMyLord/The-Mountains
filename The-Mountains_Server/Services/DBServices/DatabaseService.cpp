@@ -6,7 +6,7 @@
 
 DatabaseService::DatabaseService() {
     conn = new mysqlpp::Connection(false);
-    if (!conn->connect("the_mountains", "175.24.57.9", "root", "916804665")) {
+    if (!conn->connect("NULL", "NULL", "NULL", "NULL")) {
         // 连接数据库失败
         std::string log_buffer;
         log_buffer = '[' + TimeServices::getTime() + "  DBConnetion Error]:\tCan't connect to database!";
