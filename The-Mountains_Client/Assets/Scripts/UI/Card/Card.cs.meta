@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: ee212de3888db7f42ae7d4cd9eeef2f5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - waterCardFace: {fileID: 4877617311258307839, guid: 6a4d61fe9a213f94ba12f13949a290d1,
+      type: 3}
+  - fireCardFace: {fileID: 4079815575821370594, guid: f5ca0c922e2824144afe91422abf4617,
+      type: 3}
+  - lightCardFace: {fileID: 1206651604485371086, guid: 4de3bb98fce447b4d970b2c5a9354ebf,
+      type: 3}
+  - candleCardFace: {fileID: 8936991619627611810, guid: 5350bd9c39233ff489cb29da321269af,
+      type: 3}
+  - woodCardFace: {fileID: 840537084227706269, guid: b945555f7f5f37043b9e53b46d1e6e1b,
+      type: 3}
+  - fogCardFace: {fileID: 4074602156427440484, guid: b480846b56880f9408bbab8727f28b64,
+      type: 3}
+  - witchCardFace: {fileID: 6749691817139450885, guid: 3ada893ca502c1b428d9e3757b518805,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
