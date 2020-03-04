@@ -23,11 +23,13 @@ private:
     void MatchDetect_t();
 
     int room_id;
+
+    bool is_detect;
 };
 
 template<typename Session>
 GameServer<Session>::GameServer(boost::asio::io_context &io_context, short port, bool is_beats)
-        : AsyncServer<Session>(io_context, port, is_beats), room_id(1) {
+        : AsyncServer<Session>(io_context, port, is_beats), room_id(1), is_detect(false){
 }
 
 template<typename Session>
@@ -42,8 +44,11 @@ void GameServer<Session>::accept_handler(tcp::socket socket) {
             this->room_container, this->offline_list);
     this->client_info.push_back(ptr);
 
-    std::thread match_detect_t(&GameServer::MatchDetect_t, this);
-    match_detect_t.detach();
+    if(!is_detect) {
+        std::thread match_detect_t(&GameServer::MatchDetect_t, this);
+        match_detect_t.detach();
+        is_detect = true;
+    }
 
     ptr->StartSession(); // 开始接受客户端的消息
 }
