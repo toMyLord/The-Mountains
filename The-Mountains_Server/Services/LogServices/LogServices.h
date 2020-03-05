@@ -6,6 +6,7 @@
 #define THE_MOUNTAINS_SERVER_LOGSERVICES_H
 
 #include <iostream>
+#include <mutex>
 #include <fstream>
 #include "../TimeServices/TimeService.h"
 
@@ -17,12 +18,14 @@ private:
     LogServices();
 
     static LogServices * log_service;
+    static std::mutex mtx;
     std::ofstream log_file;
 
 public:
     // 内联以提高效率
     static inline LogServices * getInstance() {
         if(log_service == nullptr){
+            std::lock_guard<std::mutex> lck(mtx);
             log_service = new LogServices();
         }
         return log_service;

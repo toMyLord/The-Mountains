@@ -5,6 +5,7 @@
 #include "LogServices.h"
 
 LogServices * LogServices::log_service = nullptr;
+std::mutex LogServices::mtx;
 
 LogServices::LogServices(): log_file("./server.log", std::ios::app) {}
 
