@@ -26,7 +26,8 @@ public:
     static inline LogServices * getInstance() {
         if(log_service == nullptr){
             std::lock_guard<std::mutex> lck(mtx);
-            log_service = new LogServices();
+            if(log_service == nullptr)
+                log_service = new LogServices();
         }
         return log_service;
     }
